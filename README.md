@@ -120,7 +120,7 @@ optional arguments:
 ## Example
 
 ```
-./kids_crypto.py -T U --grade 2 "Top secret! The cookies are hidden in the red bowl!"
+./crypto_puzzles.py -T U --grade 2 "Top secret! The cookies are hidden in the red bowl!"
 Top ¡ʇǝɹɔǝs The sǝᴉʞooɔ are uǝppᴉɥ in ǝɥʇ red ¡ꞁʍoq
 ```
 

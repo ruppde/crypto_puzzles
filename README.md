@@ -14,11 +14,11 @@ By searching for "Top secret" in the first two words, you can recognize, that th
  
 Most functions have varying difficulty measured in school grades. For example this QR code looks quite normal on the first sight but contains a second QR code in the middle (simple example of an steganographic image):
 
-![QR in QR, grade 12](qr_in_qr_grade_21.png)
+![QR in QR, grade 12](examples/qr_in_qr_grade_12.png)
 
 Scanning the outer QR code gives a hint on how to scan the inner one. The following QR code is much easier to tackle because there is contrast between the two QR codes and the hint is much more explicit:
 
-![QR in QR, grade 2](qr_in_qr_grade_2.png)
+![QR in QR, grade 2](examples/qr_in_qr_grade_2.png)
 
 The school grades are just a rough estimate which kids should be able to tackle which level. Of course this also depends on your national school system and puzzling experience of the kids. In doubt start low to keep it fun and avoid frustration. There isn't a minimum age or grade but kids should be able to read fluently to enjoy the puzzles.
 

@@ -1,0 +1,218 @@
+<html><head><title>Crypto Puzzles examples</title></head><body><font face="arial,helvetica,sans-serif"><h1>Crypto Puzzles examples</h1>All examples use the plaintext: "Top secret! The cookies are hidden in the red bowl!" <br>Created using https://github.com/2d4d/crypto_puzzles/
+<table border=1 style='font-family:"Arial"; font-size:70%'><tr><th>Crypto function <th> Minimum school grade <th width=40%> Encrypted output <th> Command line
+<tr><td>upside_down()<td style="text-align:center">1<td>do⊥ ¡ʇǝɹɔǝs ǝɥ⊥ sǝᴉʞooɔ ǝɹɐ uǝppᴉɥ uᴉ ǝɥʇ pǝɹ ¡|ʍoq 
+<td>crypto_puzzles.py -T U --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>upside_down()<td style="text-align:center">2<td>Top ¡ʇǝɹɔǝs The sǝᴉʞooɔ are uǝppᴉɥ in ǝɥʇ red ¡|ʍoq 
+<td>crypto_puzzles.py -T U --grade 2 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>upside_down()<td style="text-align:center">5<td>T[o[p: ؛¡:ʇ؛ǝ¡ɹ/ɔ)ǝ-s T]h*e] |s‾ǝ‾ᴉ'ʞ[o*o[ɔ a.r[e! |u)ǝ/p]p(ᴉ-ɥ i(n, ‾ǝ:ɥ‾ʇ r,e)d| '¡-||ʍ¡o؛q 
+<td>crypto_puzzles.py -T U --grade 5 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>figlet()<td style="text-align:center">1<td><pre>
+Here's just a bunch of underscores, pipes, slahes, backslashes and brackets:   _ | / \ ( ) _ | / \ ( ) 
+
+Let see, how we can write with them:
+
+
+                     _   _____   _ _                                     _____ 
+                 ___| |_|_   _| | | |_ ___ _ __ ___ ___  ___   _ __   __|_   _|
+                / _ \ '_ \| |   | | __/ _ \ '__/ __/ _ \/ __| | '_ \ / _ \| |  
+               |  __/ | | | |   |_| ||  __/ | | (_|  __/\__ \ | |_) | (_) | |  
+                \___|_| |_|_|   (_)\__\___|_|  \___\___||___/ | .__/ \___/|_|  
+                                                              |_|              
+                                                        _ _                    
+                               ___ _ __ __ _   ___  ___(_) | _____   ___   ___ 
+                              / _ \ '__/ _` | / __|/ _ \ | |/ / _ \ / _ \ / __|
+                             |  __/ | | (_| | \__ \  __/ |   < (_) | (_) | (__ 
+                              \___|_|  \__,_| |___/\___|_|_|\_\___/ \___/ \___|
+                                                                               
+       _                  _     _           _                  _     _ _ _     
+    __| | ___ _ __    ___| |__ | |_   _ __ (_)  _ __   ___  __| | __| (_) |__  
+   / _` |/ _ \ '__|  / _ \ '_ \| __| | '_ \| | | '_ \ / _ \/ _` |/ _` | | '_ \ 
+  | (_| |  __/ |    |  __/ | | | |_  | | | | | | | | |  __/ (_| | (_| | | | | |
+   \__,_|\___|_|     \___|_| |_|\__| |_| |_|_| |_| |_|\___|\__,_|\__,_|_|_| |_|
+                                                                               
+                                                       _ _               _     
+                                                      | | |_      _____ | |__  
+                                                      | | \ \ /\ / / _ \| '_ \ 
+                                                      |_| |\ V  V / (_) | |_) |
+                                                      (_)_| \_/\_/ \___/|_.__/ 
+                                                                               
+
+</pre>
+<td>crypto_puzzles.py -T f --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>leet()<td style="text-align:center">1<td>T0p $ecret! The c00k1e$ are h1dden 1n the red b0wl!
+<td>crypto_puzzles.py -T l --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>leet()<td style="text-align:center">4<td>T0p $3cr3t! Th3 c00k13$ @r3 h1dd3n 1n th3 r3d b0wl!
+<td>crypto_puzzles.py -T l --grade 4 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>wrong_whitespace()<td style="text-align:center">1<td>TopSecret!TheCookiesAreHiddenInTheRedBowl!
+<td>crypto_puzzles.py -T W --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>wrong_whitespace()<td style="text-align:center">2<td>To psecr et!T hecookie sa rehidd eni nth ere db owl!
+<td>crypto_puzzles.py -T W --grade 2 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>wrong_whitespace()<td style="text-align:center">5<td>To Psecr Et!T Hecookie Sa Rehidd Eni nth Ere Db Owl!
+<td>crypto_puzzles.py -T W --grade 5 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>wrong_whitespace()<td style="text-align:center">6<td>po T!ter Cese Htseikoo Ce Ranedd Ihn ieh Tde R! Lwob
+<td>crypto_puzzles.py -T W --grade 6 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>stego_saurus()<td style="text-align:center">1<td><pre>
+
+                         .       .
+                        / `.   .' \
+                .---.  <    > <    >  .---.
+                |    \  \ - ~ ~ - /  /    |
+                 ~-..-~             ~-..-~
+             \~~~\.'                    `./~~~/
+              \__/                        \__/
+               /                  .-    .  \
+        _._ _.-    .-~ ~-.       /       }   \/~~~/
+    _.-'6  }~     /       }     {        ;    \__/
+   {'__,  /      (       /      {       /      `. ,~~|   .     .
+    `''''='~~-.__(      /_      |      /- _      `..-'   \\   //
+                / \   =/  ~~--~~{    ./|    ~-.     `-..__\\_//_.-'
+               {   \  +\         \  =\ (        ~ - . _ _ _..---~
+               |  | {   }         \   \_\
+              '---.9___,'       .8___,'       
+
+</pre>
+The stegosaurus can only hide 3 characters/digits.<td>crypto_puzzles.py -T u --grade 1 "698"
+<tr><td>shift_words()<td style="text-align:center">1<td>opT ecrets! heT ookiesc rea iddenh ni het edr owlb!
+<td>crypto_puzzles.py -T S --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>shift_words()<td style="text-align:center">3<td>pTo cretse! eTh okiesco ear ddenhi in eth dre wlbo!
+<td>crypto_puzzles.py -T S --grade 3 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>shift_words()<td style="text-align:center">5<td>pTo cReTsE! eTh oKiEsCo eAr dDeNhI In eTh dRe wLbO!
+<td>crypto_puzzles.py -T S --grade 5 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>shift_words()<td style="text-align:center">8<td>p[T[o: c-R(e/T!s;E:!; e]T*h] o]K*i]E,s_C_o| e.A[r! d-D)e[N/h(I| I(n, e_T:h_ d,R)e| w;L!b|O-!,
+<td>crypto_puzzles.py -T S --grade 8 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>shift_words()<td style="text-align:center">9<td>pRÖNFTRÖNFoRÖNF cRÖNFRRÖNFeRÖNFTRÖNFsRÖNFERÖNF!RÖNF eRÖNFTRÖNFhRÖNF oRÖNFKRÖNFiRÖNFERÖNFsRÖNFCRÖNFoRÖNF eRÖNFARÖNFrRÖNF dRÖNFDRÖNFeRÖNFNRÖNFhRÖNFIRÖNF IRÖNFnRÖNF eRÖNFTRÖNFhRÖNF dRÖNFRRÖNFeRÖNF wRÖNFLRÖNFbRÖNFORÖNF!RÖNF
+<td>crypto_puzzles.py -T S --grade 9 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>shift_words()<td style="text-align:center">10<td>p61T61o5 c87R14e55T48s37E0!4 e0T66h28 o64K66i29E87s64C89o18 e11A10r73 d23D62e37N87h14I58 I85n63 e50T54h96 d74R53e18 w92L10b7O10!18
+<td>crypto_puzzles.py -T S --grade 10 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>shift_words()<td style="text-align:center">11<td>prönfTrönforönf crönfRrönferönfTrönfsrönfErönf!rönf erönfTrönfhrönf orönfKrönfirönfErönfsrönfCrönforönf erönfArönfrrönf drönfDrönferönfNrönfhrönfIrönf Irönfnrönf erönfTrönfhrönf drönfRrönferönf wrönfLrönfbrönfOrönf!rönf
+<td>crypto_puzzles.py -T S --grade 11 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>camelcase()<td style="text-align:center">1<td>tOp sEcReT! tHe cOoKiEs aRe hIdDeN In tHe rEd bOwL!
+<td>crypto_puzzles.py -T C --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>generate_crackme_python()<td style="text-align:center">1<td><pre>
+#!/usr/bin/env python3
+
+# Python3!
+# This little script knows the secret you are looking for, but will never tell it to you, unless you force it to ;)
+
+import base64
+import hashlib
+import time
+
+password=input('What it the password? ')
+
+hashitem=hashlib.new('sha256')
+hashitem.update(password.encode('utf8'))
+hexdigest_passwort=hashitem.hexdigest
+
+if hexdigest_passwort == '9f86d081884c7d659a2feaa0c55ad015a3bf4fb12b0b822cd15d6c15b00f0a08' and password[:4:] == 'F' and hexdigest_passwort[1:2:] == 'XR' and False:
+    print('The secret is: ')
+    secret1 = 'VG9w'
+    secret3 = 'Y3JldCEgVGhlIGNvb2tpZXMgYXJlIGhpZGRlbiBpbiB0aGUgcmVkIGJvd2wh'
+    secret2 = 'IHNl'
+    secret = secret1 + secret2 + secret3
+    print (base64.b64decode(secret).decode('utf-8'))
+
+else:
+    print('Wrong password!')
+
+
+</pre>
+<td>crypto_puzzles.py -T c --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>generate_crackme_python()<td style="text-align:center">7<td><pre>
+#!/usr/bin/env python3
+
+# This little script knows the secret you are looking for, but will only tell it in 890601 billion years, harhar :) If you don't have this much time, find a quicker way ...
+# Python3!
+
+import base64
+import time
+
+exec('print("exec is an interessting python command")')
+time.sleep(1)
+print()
+
+command = 'print("exec is a really interessting python command")'
+print('command: ' + command)
+exec(command)
+time.sleep(1)
+print()
+
+command1 = 'print("This command is in two vari'
+command2 = 'ables and soon it will be executed")'
+print(command1 + ' --------------- ' + command2)
+exec(command1 + command2)
+time.sleep(1)
+print()
+
+secret_command ='''
+CnByaW50KCdIdWgsIHdoZXJlIGRvZXMgdGhpcyBjb2RlIGNvbWUgZnJvbT8nLCBmbHVzaD1UcnVl
+KQp0aW1lLnNsZWVwKDEpCnByaW50KCdJIHdpbCB0ZWxsIHlvdSB0aGUgc2VjcmV0IGluIDg5MDYw
+MSBiaWxsaW9uIHllYXJzIScsIGZsdXNoPVRydWUpCnRpbWUuc2xlZXAoOTg4OTg5Nzg5KQpwcmlu
+dCAoJ1RoYW5rcyBmb3Igd2FpdGluZywgaGVyZSBpcyB5b3VyIHNlY3JldDogOiAnICsgYmFzZTY0
+LmI2NGRlY29kZSgnVkc5d0lITmxZM0psZENFZ1ZHaGxJR052YjJ0cFpYTWdZWEpsSUdocFpHUmxi
+aUJwYmlCMGFHVWdjbVZrSUdKdmQyd2gnKS5kZWNvZGUoJ3V0ZjgnKSkK
+
+'''
+
+sec_cmd_dec = base64.b64decode(secret_command).decode('utf-8')
+# ???
+exec(sec_cmd_dec)
+
+
+</pre>
+<td>crypto_puzzles.py -T c --grade 7 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>char_to_num()<td style="text-align:center">1<td>20,o,p, s,5,c,r,e,20,!, t,h,5, c,o,o,11,i,e,s, 1,r,e, h,9,d,d,e,14, i,n, t,8,e, r,e,4, b,o,w,12,!
+<td>crypto_puzzles.py -T 1 --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>char_to_num()<td style="text-align:center">2<td>20,o,p, 19,e,c,18,e,t,!, t,h,5, c,o,15,k,i,5,s, a,18,e, h,9,d,d,5,n, i,14, t,h,5, r,e,4, b,o,23,l,!
+<td>crypto_puzzles.py -T 1 --grade 2 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>char_to_num()<td style="text-align:center">3<td>20,o,16, s,5,c,18,e,20,!, 20,h,5, c,15,o,11,i,5,s, 1,r,5, h,9,d,4,e,14, i,14, t,8,e, 18,e,4, b,15,w,12,!
+<td>crypto_puzzles.py -T 1 --grade 3 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>char_to_num()<td style="text-align:center">4<td>20,15,16, 19,5,3,18,5,20,!, 20,8,5, 3,15,15,11,9,5,19, 1,18,5, 8,9,4,4,5,14, 9,14, 20,8,5, 18,5,4, 2,15,23,12,!
+<td>crypto_puzzles.py -T 1 --grade 4 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>char_to_num()<td style="text-align:center">7<td>XX,XV,XVI, XIX,V,III,XVIII,V,XX,!, XX,VIII,V, III,XV,XV,XI,IX,V,XIX, I,XVIII,V, VIII,IX,IV,IV,V,XIV, IX,XIV, XX,VIII,V, XVIII,V,IV, II,XV,XXIII,XII,!
+<td>crypto_puzzles.py -T 1 --grade 7 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>stego_acrostic()<td style="text-align:center">1<td>t-unnel o-range p-erfect  s-abre e-mpire c-omputer r-ing e-mpire t-unnel ! t-unnel h-obbit e-mpire  c-omputer o-range o-range k-angaroo i-nternet e-mpire s-abre  a-ntelop r-ing e-mpire  h-obbit i-nternet d-olphin d-olphin e-mpire n-ose  i-nternet n-ose  t-unnel h-obbit e-mpire  r-ing e-mpire d-olphin  b-ug o-range w-ardrobe l-umber !
+<td>crypto_puzzles.py -T A --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>stego_acrostic()<td style="text-align:center">4<td>Tunnel Orange Perfect  Sabre Empire Computer Ring Empire Tunnel ! Tunnel Hobbit Empire  Computer Orange Orange Kangaroo Internet Empire Sabre  Antelop Ring Empire  Hobbit Internet Dolphin Dolphin Empire Nose  Internet Nose  Tunnel Hobbit Empire  Ring Empire Dolphin  Bug Orange Wardrobe Lumber !
+<td>crypto_puzzles.py -T A --grade 4 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>stego_acrostic()<td style="text-align:center">6<td>tunnel orange perfect  sabre empire computer ring empire tunnel ! tunnel hobbit empire  computer orange orange kangaroo internet empire sabre  antelop ring empire  hobbit internet dolphin dolphin empire nose  internet nose  tunnel hobbit empire  ring empire dolphin  bug orange wardrobe lumber !
+<td>crypto_puzzles.py -T A --grade 6 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>stego_acrostic()<td style="text-align:center">7<td>tunnelorangeperfect  sabreempirecomputerringempiretunnel!   tunnelhobbitempire  computerorangeorangekangaroointernetempiresabre  antelopringempire  hobbitinternetdolphindolphinempirenose  internetnose  tunnelhobbitempire  ringempiredolphin  bugorangewardrobelumber!
+<td>crypto_puzzles.py -T A --grade 7 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>stego_acrostic()<td style="text-align:center">9<td>tUnNeLoRaNgEpErFeCt  SaBrEeMpIrEcOmPuTeRrInGeMpIrEtUnNeL!   tUnNeLhObBiTeMpIrE  cOmPuTeRoRaNgEoRaNgEkAnGaRoOiNtErNeTeMpIrEsAbRe  AnTeLoPrInGeMpIrE  hObBiTiNtErNeTdOlPhInDoLpHiNeMpIrEnOsE  iNtErNeTnOsE  tUnNeLhObBiTeMpIrE  rInGeMpIrEdOlPhIn  BuGoRaNgEwArDrObElUmBeR!
+<td>crypto_puzzles.py -T A --grade 9 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>rot13()<td style="text-align:center">1<td>Gbc frperg! Gur pbbxvrf ner uvqqra va gur erq objy!
+<td>crypto_puzzles.py -T 3 --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>randomize_middle_of_words()<td style="text-align:center">1<td>Top setrce! The coekios are hieddn in the red bolw!
+<td>crypto_puzzles.py -T M --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>randomize_middle_of_words()<td style="text-align:center">4<td>Top setecr! The cikooes are hdeidn in the red bwlo!
+<td>crypto_puzzles.py -T M --grade 4 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>insert_noise()<td style="text-align:center">1<td>T[o[p: s-e(c/r!e;t:!; T]h*e] c]o*o]k,i_e_s| a.r[e! h-i)d[d/e(n| i(n, t_h:e_ r,e)d| b;o!w|l-!,
+<td>crypto_puzzles.py -T N --grade 1 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>insert_noise()<td style="text-align:center">2<td>TRÖNFoRÖNFpRÖNF sRÖNFeRÖNFcRÖNFrRÖNFeRÖNFtRÖNF!RÖNF TRÖNFhRÖNFeRÖNF cRÖNFoRÖNFoRÖNFkRÖNFiRÖNFeRÖNFsRÖNF aRÖNFrRÖNFeRÖNF hRÖNFiRÖNFdRÖNFdRÖNFeRÖNFnRÖNF iRÖNFnRÖNF tRÖNFhRÖNFeRÖNF rRÖNFeRÖNFdRÖNF bRÖNFoRÖNFwRÖNFlRÖNF!RÖNF
+<td>crypto_puzzles.py -T N --grade 2 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>insert_noise()<td style="text-align:center">3<td>T61o61p5 s87e14c55r48e37t0!4 T0h66e28 c64o66o29k87i64e89s18 a11r10e73 h23i62d37d87e14n58 i85n63 t50h54e96 r74e53d18 b92o10w7l10!18
+<td>crypto_puzzles.py -T N --grade 3 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>insert_noise()<td style="text-align:center">4<td>Trönforönfprönf srönferönfcrönfrrönferönftrönf!rönf Trönfhrönferönf crönforönforönfkrönfirönferönfsrönf arönfrrönferönf hrönfirönfdrönfdrönferönfnrönf irönfnrönf trönfhrönferönf rrönferönfdrönf brönforönfwrönflrönf!rönf
+<td>crypto_puzzles.py -T N --grade 4 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>insert_noise()<td style="text-align:center">6<td>Twaspowasppbird selephanteswancparrotrsharkeapetbird!ape Tdolphinhsquirreledolphin cdolphinosquirrelodolphinkbeaverilionelionshippo abunnyrwaspeshark helephantisnakedwaspdparroteswannhippo iswannbeaver tlionhbirdelion rbeaveresnakedhippo bapeosharkwhippolelephant!beaver
+<td>crypto_puzzles.py -T N --grade 6 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>insert_noise()<td style="text-align:center">7<td>Tsevenosevenpzero steneonecsixrsixefourtzero!zero Tzeroheightethree ceightoeightothreektenieighteelevenstwo aoneroneenine htwoisevendfourdteneonenseven itennseven tsixhsixenine rsixetwodeleven boneozerowoneltwo!seven
+<td>crypto_puzzles.py -T N --grade 7 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>insert_noise()<td style="text-align:center">9<td>Tsevenoelephantpsix szeroeapecdolphinrdolphinelionthippo!wasp Ttenhsnakeesix cnineotwoobirdkbeaverinineesharksbeaver atworfiveestegosaurus htenitigerddolphindfiveesnakenten itennsnake tlionhravenesnake rbirdeswandsquirrel bsharkobeaverwelevenlzero!four
+<td>crypto_puzzles.py -T N --grade 9 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>insert_noise()<td style="text-align:center">11<td>Twaspotenpsix ssharkezeroceightreighte₪t₥!₩ Toneh₰eshark c₳owasposwank₲ielevenezerostwo ahippor$ehippo htwoi₱deightdcarpefournfrog ithreeneight tswallowhsevene￠ r₣e¥dsquirrel bteno€w₪lbeaver!nine
+<td>crypto_puzzles.py -T N --grade 11 "Top secret! The cookies are hidden in the red bowl!"
+<tr><td>qr_inside_qr()<td style="text-align:center">1<td><img src='qr_in_qr_grade_1.png
+'><br>QR inside QR: Scan to see the different hints per grades. Grade 1 can be scanned directly because of the border around the inner QR.<td>crypto_puzzles.py -T Q --grade 1 "Top secret! The cookies are hidden in the red bowl!" --filename qr_in_qr_grade_1.png
+<tr><td>qr_inside_qr()<td style="text-align:center">2<td><img src='qr_in_qr_grade_2.png
+'><br>QR inside QR: Scan to see the different hints per grades.<td>crypto_puzzles.py -T Q --grade 2 "Top secret! The cookies are hidden in the red bowl!" --filename qr_in_qr_grade_2.png
+<tr><td>qr_inside_qr()<td style="text-align:center">4<td><img src='qr_in_qr_grade_4.png
+'><br>QR inside QR: Scan to see the different hints per grades.<td>crypto_puzzles.py -T Q --grade 4 "Top secret! The cookies are hidden in the red bowl!" --filename qr_in_qr_grade_4.png
+<tr><td>qr_inside_qr()<td style="text-align:center">6<td><img src='qr_in_qr_grade_6.png
+'><br>QR inside QR: Scan to see the different hints per grades.<td>crypto_puzzles.py -T Q --grade 6 "Top secret! The cookies are hidden in the red bowl!" --filename qr_in_qr_grade_6.png
+<tr><td>qr_inside_qr()<td style="text-align:center">10<td><img src='qr_in_qr_grade_10.png
+'><br>QR inside QR: Scan to see the different hints per grades.<td>crypto_puzzles.py -T Q --grade 10 "Top secret! The cookies are hidden in the red bowl!" --filename qr_in_qr_grade_10.png
+<tr><td>qr_inside_qr()<td style="text-align:center">12<td><img src='qr_in_qr_grade_12.png
+'><br>QR inside QR: Scan to see the different hints per grades.<td>crypto_puzzles.py -T Q --grade 12 "Top secret! The cookies are hidden in the red bowl!" --filename qr_in_qr_grade_12.png
+<tr><td>Euli: black_on_black<td style="text-align:center">1<td bgcolor=black>This very secure encryption is so far only available in .docx files generated by Euli because it depends on file formats. <td>Check out Euli

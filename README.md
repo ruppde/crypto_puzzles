@@ -23,7 +23,7 @@ Scanning the outer QR code gives a hint on how to scan the inner one. The follow
 The school grades are just a rough estimate which kids should be able to tackle which level. Of course this also depends on your national school system and puzzling experience of the kids. In doubt start low to keep it fun and avoid frustration. There isn't a minimum age or grade but kids should be able to read fluently to enjoy the puzzles.
 
 Other examples:
-([complete list](examples/Examples.html))
+([complete list](<https://htmlpreview.github.io/?https://github.com/2d4d/crypto_puzzles/blob/master/examples/Examples.html>))
 
 #### a) Transposition ciphers
 
@@ -164,5 +164,5 @@ crypto_puzzles.py -T SUQ "Top secret! The cookies are hidden in the red bowl!"
 ```
 The order of the techniques is relevant, not all of them work together and it gets incomprehensible quickly if you use too many.
 
-More usage examples can be found in the last column of the [example list](examples/Examples.html).
+More usage examples can be found in the last column of the [example list](<https://htmlpreview.github.io/?https://github.com/2d4d/crypto_puzzles/blob/master/examples/Examples.html>).
 

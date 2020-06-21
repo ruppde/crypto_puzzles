@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # crypto puzzles
-# pseudo encryption, never use for anything serious!
+# encryption for fun, never use for anything serious!
 # Copyright 2020 Arnim Rupp
 
 
@@ -29,8 +29,12 @@ import upsidedown
 import re
 import roman
 import base64
+from pyfiglet import Figlet
 from string import ascii_lowercase
 from collections import defaultdict
+from PIL import Image
+from math import sqrt
+
 
 number_words={}
 # number words have to be in the right order and start with 0
@@ -87,6 +91,7 @@ animals['de'] = [
         'schmetterling',
         ]
 
+# todo: do the same with emoji (avoid emoji which might have 2+ fitting words)
 alphabet_words = {}
 alphabet_words['en'] = [
         'antelop',
@@ -152,9 +157,9 @@ def insert_noise(intext, language, grade=1, noise_type="", noise_chars=""):
     outtext=""
     hint=""
 
-    if grade > 2:
+    #if grade > 2:
         # remove whitespace
-        intext=intext.replace(' ', '')
+        #intext=intext.replace(' ', '')
 
     for char in intext:
         if char == ' ':
@@ -195,10 +200,10 @@ def get_noise(language, grade, noise_type="", noise_chars=""):
             noise="rönf"
         elif grade == 6:
             noise = get_noise(language,grade, 'animals')
-        elif grade == 7:
-            # numbe words are harder bec shorter
+        elif grade < 9:
+            # number words are harder because they're shorter
             noise = get_noise(language,grade, 'numberwords')
-        elif grade == 8:
+        elif grade < 11 :
             # mix of animals and numbers
             if random.randrange(2) == 1:
                 noise = get_noise(language,grade, 'numberwords')
@@ -267,6 +272,8 @@ def upside_down(text, language, grade, upside_down_rate=0):
 
     # top secret => doʇ ʇǝɹɔǝs
 
+    # todo: keep punctuation marks in place? at the moment it's dOʇ ¡⊥ǝᴚɔƎs, would dOʇ ⊥ǝᴚɔƎs¡ be better/easier for lower grades? (code in shift_words)
+
     if grade == 1:
         upside_down_rate = 1
     else:
@@ -287,7 +294,7 @@ def upside_down(text, language, grade, upside_down_rate=0):
     for word in words:
         count += 1
 
-        if grade > 2:
+        if grade > 4:
             word, hint = insert_noise(word, language, 1)
 
         if count/upside_down_rate == int(count/upside_down_rate):
@@ -425,7 +432,8 @@ def reichify(wort, grade):
 
 def lässn_tursch_chraipen(intext, language, grade):
 
-    # special encryption, ignore if you're not from germany ;)
+    # special German encryption, ignore if you're not from Germany ;)
+
     # streng geheim => schdränk Kehaim
 
     # list for use in repl function in re.sub later
@@ -520,6 +528,7 @@ def shift_words(intext, language, grade):
     replacements = []
 
     for word in words:
+        # store punctuation marks in replacements to avoid also shifting them, will be appended in the end
         word = re.sub('([\.,:;!?])$', repl, word)
         if grade < 3:
             outtext += word[1:] + word[0]
@@ -533,11 +542,11 @@ def shift_words(intext, language, grade):
     outtext = outtext.rstrip(' ')
 
     # make harder
-    if grade > 3:
+    if grade > 4:
         outtext, hint_dummy = camelcase(outtext, language, 1)
-    if grade > 5:
+    if grade > 7:
         # insert noise with reduced grade
-        outtext, hint = insert_noise(outtext, language, grade -4 )
+        outtext, hint = insert_noise(outtext, language, grade -7 )
 
     return outtext, hint
 
@@ -557,15 +566,22 @@ def camelcase(intext, language, grade):
 
 def rot13(intext, language, grade):
     # top secret => gbc frperg
+    # todo: make rotX with known plaintext attack for the higher grades to figure out X
     hint=""
     if grade < 5:
-        hint="a=n, b=o, c=p, d=q, e=r, f=s, g=t, h=u, i=v, j=w, k=x, l=y, m=z, n=a, o=b, p=c, q=d, r=e, s=f, t=g, u=h, v=i, w=j, x=k, y=l, z=m"
+        hint="a=n, b=o, c=p, d=q, e=r, f=s, g=t, h=u, i=v, j=w, k=x, l=y, m=z, n=a, o=b, p=c, q=d, r=e, s=f, t=g, u=h, v=i, w=j, x=k, y=l, z=m."
     elif grade < 7:
-        hint="a=n, b=o, c=p, d=q, ..."
-    elif grade < 9:
-        hint="a=n, b=o, ..."
+        hint="a=n, b=o, c=p, d=q, e=r, ..."
+    elif grade < 11:
+        hint="a=n, b=o, c=p, ..."
     else:
         hint="Caesar, rot13, geocaching"
+
+    if grade < 11:
+        if language =='en':
+            hint += " This encryption is called Caesar cipher or ROT13. Each letter in the plaintext is replaced by a letter 13 positions down the alphabet."
+        elif language =='de':
+            hint += " Diese Verschlüsselung nennt sich Caesar-Verschlüsselung oder ROT13. Jeder Buchstabe im Klartext wird ersetzt durch den Buchstaben 13 Stellen weiter im Alphabet."
 
     return (codecs.encode(intext, "rot-13")), hint
 
@@ -625,8 +641,10 @@ def ip_to_roman(ip):
         outtext += roman.toRoman(int(tuple)) + '.' 
     return outtext.rstrip('.')
 
-def char_to_word(intext, language, grade):
+def stego_acrostic(intext, language, grade):
+    # hide message in first character of the words
     # top secret => Toll Oder Perfekt  Schön Ehrlich Computer Reichlich Ehrlich Toll
+    # could be improved by trying to produce sentences which at least follow basic structures like: subject verb object (not yet the level of medival crypto https://en.wikipedia.org/wiki/Steganographia ;)
     intext=intext.lower()
     outtext=""
 
@@ -716,9 +734,13 @@ def convert_num_to_number_words(intext, language):
 
     return outtext
 
-def qr_code(intext, language, filename):
+def qr_code(intext, language, filename='qr.png'):
 
-    # size or qr code
+    # create qr code and save to png. not a puzzle until you print it out and cut it in pieces ;) or have a puzzle in the resulting content (ǝpᴉsdn uʍop works great on all devices I've tried so far)
+
+    if not filename: filename='qr.png'
+
+    # size of qr code
     # don't make it too small because some cheap kids smartphones with fix focus lenses aren't good at macro mode.
     # too big uses more ink
     scale = 4
@@ -727,7 +749,118 @@ def qr_code(intext, language, filename):
     qr = pyqrcode.create(intext, encoding='utf-8', mode='binary', error='H')
 
     # set color to grey to save ink at printing
-    qr.png(filename, scale=scale, module_color=(100, 100, 100))
+    qr.png(filename, scale=scale, quiet_zone=4, module_color=(100, 100, 100))
+
+    if 'ƃnqǝp' in globals() and ƃnqǝp:
+        print("saved file: " + filename)
+
+    return filename
+
+def qr_inside_qr(innertext, outertext, language, grade, filename):
+
+    if not filename: 
+        filename='qr_in_qr.png'
+
+    # create big QR code with small QR in the middle and save to png. 
+    # this puzzles gives no hint in text form, but it's put into the outer QR
+
+    # outer QR is always light grey to save ink at printing. default for inner is the same grey
+    color_inner=[100, 100, 100]
+    if grade <3:
+        # inner qr black to have contrast
+        color_inner=[20, 20, 20]
+        if language == 'en':
+            # instead of covering the outer QR, the players could also use scissors to cut it away. but that's risky if they cut wrong, so hint for covering it.
+            outertext = 'Hmmm, this looks like there is another QR code in the middle of the big one. But your QR reader can not read it, because the bigger QR code all around confuses it. Covering the big outer QR code with some paper might do the trick.'
+        elif language == 'de':
+            outertext = 'Hmmm, sieht so aus wie wenn da ein weitere QR Code in der Mitte des großen ist. Aber Dein QR-Leser kann ihn nicht erkennen, weil der große QR Code außenrum ihn verwirrt. Den äußeren QR Code mit etwas Papier abdecken könnte funktionieren.'
+    elif grade <6:
+        # inner qr dark grey to have contrast
+        color_inner=[40, 40, 40]
+        if language == 'en':
+            outertext = 'Hmmm, this looks like there is another QR code in the middle of the big one. But your QR reader can not read it, because the bigger QR code all around confuses it. Four sheets of paper might do the trick.'
+        elif language == 'de':
+            outertext = 'Hmmm, sieht so aus wie wenn da ein weitere QR Code in der Mitte des großen ist. Aber Dein QR-Leser kann ihn nicht erkennen, weil der große QR Code außenrum ihn verwirrt. Mit vier Papieren an den richtigen Stellen könnte es funktionieren.'
+        outertext, hint = camelcase(outertext, language, 1)
+    elif grade <11:
+        # inner qr grey to have some contrast
+        color_inner=[60, 60, 60]
+        if language == 'en':
+            outertext = 'Hmmm, this looks like there is a second QR code in the middle of the big one. Look for the three squares the outer QR has in the corners in the inside. But your QR reader can not read it, because the bigger QR code all around confuses it. Some paper might do the trick.'
+        elif language == 'de':
+            outertext = 'Hmmm, sieht so aus wie wenn da ein zweiter QR Code in der Mitte des großen ist. Suche die drei großen Quadrate, die der äußere QR Code in den Ecken hat, im Inneren. Aber Dein QR-Leser kann ihn nicht erkennen, weil der große QR Code außenrum ihn verwirrt. Mit etwas Papier könnte es funktionieren.'
+        # make hint a bit harder to read
+        outertext, hint = wrong_whitespace(outertext, language, 1)
+    else:
+        # inner qr grey to have some contrast (depends on the printer how good this is visible, maybe increase contrast?)
+        color_inner=[90, 90, 90]
+        if language == 'en':
+            outertext = 'Hmmm, this looks like there is another QR code in the middle of the big one. Look for the three squares the outer QR has in the corners in the inside. But your QR reader can not read it, because the bigger QR code all around confuses it. Some paper might do the trick.'
+        elif language == 'de':
+            outertext = 'Hmmm, sieht so aus wie wenn da ein weitere QR Code in der Mitte des großen ist. Suche die drei großen Quadrate, die der äußere QR Code in den Ecken hat, im Inneren. Aber Dein QR-Leser kann ihn nicht erkennen, weil der große QR Code außenrum ihn verwirrt. Mit etwas Papier könnte es funktionieren.'
+
+        # make hint a bit harder to read (upside_down worked on all QR readers I've tried so far)
+        outertext, hint = upside_down(outertext, language, 1)
+
+    # size of single qr code pixels
+    # don't make it too small because some cheap kids smartphones with fix focus lenses aren't good at macro mode.
+    # too big uses more ink
+    scale = 3
+
+    # todo: solve someday (mathematically? try&error?)
+    # goal: make the outer qr as small as possible but still be readable
+    # parameters: inner qr has minimum error correction, outer maximum
+    # until then, this kind of works with linear scaling:
+    min_size_factor = 4
+    i_len = len(innertext)
+    # 1-18 chars make no difference in size
+    if i_len < 18: i_len = 18 
+    o_len = len(outertext) 
+    if i_len * min_size_factor > o_len:
+        # somehow scaling linear works quite well, would have assumed something ** ???
+        needed_len = i_len * min_size_factor
+        outertext += '  ' + '🤔 🧐 ' * (int( (needed_len - o_len ) / 6 ) + 1)
+
+        # old school filler ;)
+        #outertext += '  ' + '°º¤ø,¸¸,ø¤º°`' * (int( (needed_len - o_len ) / 13 ) + 1)
+
+    # set minimum error correction, otherwise at least the ios qr reader can read it in the middle of the bigger qr without any effort so the puzzle could be solved accidently by going to close
+    inner_qr = pyqrcode.create(innertext, encoding='utf-8', mode='binary', error='L')
+    # set maximum error correction because redundancy is needed to make up for the pixels hidden by the small qr in the middle
+    outer_qr = pyqrcode.create(outertext, encoding='utf-8', mode='binary', error='H')
+
+    # set color to grey to save ink at printing
+    # no border for the inner qr to make it seamless
+    inner_qr_file = '/tmp/qr_inner_tmp.png'
+    outer_qr_file = '/tmp/qr_outer_tmp.png'
+
+    if grade == 1:
+        # make a border around the inner QR, very easy, the ios QR reader doesn't read the outer QR anymore
+        inner_quiet_zone=1
+    else:
+        inner_quiet_zone=0
+
+    inner_qr.png(inner_qr_file, scale=scale, quiet_zone=inner_quiet_zone, module_color=color_inner)
+    outer_qr.png(outer_qr_file, scale=scale, quiet_zone=4, module_color=(100, 100, 100))
+
+    # .convert('RGB') so that each image gets its own color palette, otherwise both qr will have the same color
+    inner_img = Image.open(inner_qr_file).convert('RGBA')
+    outer_img = Image.open(outer_qr_file).convert('RGBA')
+
+    # ingnore width because qr codes are square :)
+    height_outer = outer_img.size[0]
+    height_inner = inner_img.size[0]
+
+    offset = int((height_outer - height_inner ) / 2)
+
+    outer_img.paste(inner_img,(offset,offset))
+
+    outer_img.save(filename)
+
+
+    if 'ƃnqǝp' in globals() and ƃnqǝp:
+        outer_img.show()
+        print("saved file: " + filename)
 
     return filename
 
@@ -781,102 +914,178 @@ def join_puzzle(intext, language, grade, player_names=['Alice', 'Bob'], noise=''
 
     return outtexts
 
+def deumlaut(text):
+    # replace funny characters 
+    # todo: other languages
+    text = text.replace('ä','ae')
+    text = text.replace('ö','oe')
+    text = text.replace('ü','ue')
+    text = text.replace('Ä','Ae')
+    text = text.replace('Ö','Oe')
+    text = text.replace('Ü','Ue')
+    text = text.replace('ß','ss')
+    return text
 
-def generate_crackme_python(intext, language, grade, crackme_num):
+def figlet(intext, language, grade, font='ivrit'):
 
     outtext = ''
 
-    crackme_template = {}
+    # some fonts don't have e.g. ä so convert ä => ae
+    intext = deumlaut(intext)
 
-    if crackme_num == 1 or grade <6:
+    if language == 'en':
+        outtext = "Here's just a bunch of underscores, pipes, slahes, backslashes and brackets:   _ | / \ ( ) _ | / \ ( ) \n\nLet see, how we can write with them:\n\n\n"
+    elif language == 'de':
+        outtext = "Hier ist ein kleiner Haufen Unterstriche, senkrechter Striche, schräger Striche, Backslashes und Klammern:   | ||  __/ | | (_|  __/\__ \ | |_) | (_) | |_ \n\nLass mal schauen, wie wir damit schreiben können:\n\n\n"
 
-        # define template for crackme, anything with TEMPL_ will be replaced with beef
-        # todo!!! this sucks, seperate code from text 
-        crackme_template['de'] = """#!/usr/bin/env python3
+    f = Figlet(font=font)
+    outtext += f.renderText(intext)
 
-# Dieses kleine Programm kennt das Geheimnis, das Du suchst, wird es Dir aber erst in 9582790 Billionen Jahren verraten, harhar :) Wenn Du nicht so viel Zeit hast, musst Du einen anderen Weg suchen ...
+    hint=''
+
+    if grade < 3:
+        if language == 'en':
+            hint += 'Read backwards'
+        elif language == 'de':
+            hint += 'Rückwärts lesen'
+
+    if language == 'de':
+        hint += 'ae=ä, oe=ö, ue=ü, ss=ß'
+
+    return outtext, hint
+
+
+def stego_saurus(intext, language, grade):
+
+    # todo! so far only 3 letters possible. Include more replacement letters? Or more dinosaurs?
+    # Or put long messages into lots of noise and the coordinates for the beginning into the stegosaurus?
+
+    outtext = ''
+
+    if language == 'en':
+        hint ='Steganography is the practice of concealing a message within e.g. an image. This stegosaurus (original by R.Millward) knows the secret! It looks a bit strange because it is painted with punctuation marks, mathematical symbols and the like ;)'
+    elif language == 'de':
+        hint ='Steganographie ist eine Methode um verborgene Botschaften in z.B. einem Bild zu verstecken. Dieser Stegosaurus (Original von R.Millward) kennt das Geheimnis! Er sieht etwas komisch aus, weil er aus Satzzeichen, mathematischen Symbolen und ähnlichem gemalt ist ;)'
+
+    # r for raw string to avoid problem with backslashes at printing. the ①②③ will be replaced by the secret text
+    # 🦕 ;)
+    saurus =r"""
+                         .       .
+                        / `.   .' \
+                .---.  <    > <    >  .---.
+                |    \  \ - ~ ~ - /  /    |
+                 ~-..-~             ~-..-~
+             \~~~\.'                    `./~~~/
+              \__/                        \__/
+               /                  .-    .  \
+        _._ _.-    .-~ ~-.       /       }   \/~~~/
+    _.-'①  }~     /       }     {        ;    \__/
+   {'__,  /      (       /      {       /      `. ,~~|   .     .
+    `''''='~~-.__(      /_      |      /- _      `..-'   \\   //
+                / \   =/  ~~--~~{    ./|    ~-.     `-..__\\_//_.-'
+               {   \  +\         \  =\ (        ~ - . _ _ _..---~
+               |  | {   }         \   \_\
+              '---.②___,'       .③___,'       
+"""
+
+
+    saurus = saurus.replace('①', intext[0])    
+    saurus = saurus.replace('②', intext[1])    
+    saurus = saurus.replace('③', intext[2])    
+
+    return saurus, hint
+
+
+def generate_crackme_python(intext, language, grade, crackme_num):
+
+    # generates easy crackmes in python3 for beginers. Can be made to print the secret by changing 1+ lines of code
+    # for contributors: remember that understanding foreign code is a challenge in itself for beginers
+
+    # todo: harder crackmes (e.g. eval(b64decode(...) ) (doesn't have to be this crazy: https://github.com/brandonasuncion/Python-Code-Obfuscator ;)
+    # todo: other languages used by kids like js, scratch (is that possible?)
+    outtext = ''
+
+    # if no specific crackme is wanted, use grade:
+    if not crackme_num:
+        if grade <6:
+            crackme_num = 1 
+        if grade <7:
+            crackme_num = 2 
+        else:
+            crackme_num = 3
+
+
+    if crackme_num == 1:
+
+        # define template for crackme, anything with TEMPL_ will be replaced with language specific stuff
+
+        crackme_template = """#!/usr/bin/env python3
+
+# TEMPL_COMMENT_1
+# Python3!
 
 import base64
 import time
 
-print('Das ', end='', flush=True)
 time.sleep(1)
-print('Geh', end='', flush=True)
-time.sleep(2)
-print('heim', end='', flush=True)
-time.sleep(4)
-print('nis ', end='', flush=True)
-time.sleep(8)
-print('ist ', end='', flush=True)
-time.sleep(16)
-print('echt ', end='', flush=True)
-time.sleep(16)
-print('sehr ', end='', flush=True)
-time.sleep(16)
-print('geheim ', end='', flush=True)
-time.sleep(16)
-print('und ', end='', flush=True)
-time.sleep(16)
-print('ich werd es Dir in 9582790 Billionen Jahren verraten: ', end='', flush=True)
-time.sleep(65536133708153272784892092746726238958271672343782738923972138217189789897890)
+ʇxǝʇ = 'TEMPL_PRINT_1'
+print(ʇxǝʇ, end='', flush=True)
 
-print (base64.b64decode('TEMPL_BASE64_SECRET').decode('utf8'))
+time.sleep(2)
+print('TEMPL_PRINT_2', end='', flush=True)
+
+time.sleep(4)
+print('TEMPL_PRINT_3', end='', flush=True)
+
+time.sleep(988989789)
+print ('TEMPL_PRINT_4' + base64.b64decode('TEMPL_BASE64_SECRET').decode('utf8'))
 """
 
-        crackme_template['en'] = """#!/usr/bin/env python3
+        if language == 'en':
+            comment_1 = "This little script knows the secret you are looking for, but will only tell it in 890601 billion years, harhar :) If you don't have this much time, find a quicker way ..."
+            print_1 = "The secret ... "
+            print_2 = " is really very secret ... "
+            print_3 = " so I wil tell it to you in 890601 billion years!"
+            print_4 = "Thanks for waiting, here is your secret: "
+        elif language == 'de':
+            comment_1 = "# Dieses kleine Programm kennt das Geheimnis, das Du suchst, wird es Dir aber erst in 9582790 Billionen Jahren verraten, harhar :) Wenn Du nicht so viel Zeit hast, musst Du einen anderen Weg suchen ..."
+            print_1 = "Das Geheimnis ... "
+            print_2 = " ist wirklich sehr geheim ... "
+            print_3 = " also werde ich es Dir erst in 9582790 Billionen Jahren verraten!"
+            print_4 = "Danke für's Warten, hier ist Dein Geheimnis: "
 
-# This little script knows the secret you are looking for, but will only tell it in 890601 billion years, harhar :) If you don't have this much time, find a quicker way ...
+        outtext = crackme_template
 
-import base64
-import time
-
-print('The ', end='', flush=True)
-time.sleep(1)
-print('sec', end='', flush=True)
-time.sleep(2)
-print('cr', end='', flush=True)
-time.sleep(4)
-print('et ', end='', flush=True)
-time.sleep(8)
-print('is ', end='', flush=True)
-time.sleep(16)
-print('really ', end='', flush=True)
-time.sleep(16)
-print('very ', end='', flush=True)
-time.sleep(16)
-print('secret ', end='', flush=True)
-time.sleep(16)
-print('and ', end='', flush=True)
-time.sleep(16)
-print('I wil tell it to you in 890601 million years: ', end='', flush=True)
-time.sleep(65536133708153272784892092746726238958271672343782738923972138217189789897890)
-
-print (base64.b64decode('TEMPL_BASE64_SECRET').decode('utf8'))
-"""
+        # encode secret to base64 to not have it plaintext in the code (yeah, also cyberchefable)
         secret = str(base64.b64encode(intext.encode('utf-8')), 'utf-8')
-
-        outtext = crackme_template[language]
         outtext = outtext.replace('TEMPL_BASE64_SECRET', secret)
 
-    elif crackme_num == 2 or grade >= 6:
+        outtext = outtext.replace('TEMPL_COMMENT_1', comment_1)
+        outtext = outtext.replace('TEMPL_PRINT_1', print_1)
+        outtext = outtext.replace('TEMPL_PRINT_2', print_2)
+        outtext = outtext.replace('TEMPL_PRINT_3', print_3)
+        outtext = outtext.replace('TEMPL_PRINT_4', print_4)
+
+    elif crackme_num == 2:
 
         # define template for crackme, anything with TEMPL_ will be replaced with beef
-        crackme_template['de'] = """#!/usr/bin/env python3
+        crackme_template = """#!/usr/bin/env python3
 
-# Dieses kleine Programm kennt das Geheimnis, das Du suchst, wird es Dir aber auf gar keinstem Fall überhaupt nicht verraten. Außer die zwingst es dazu ;)
+# Python3!
+# TEMPL_COMMENT_1
 
 import base64
 import hashlib
 import time
 
-passwort=input('Wie lautet das Passwort? ')
+password=input('TEMPL_PRINT_1')
 
 hashitem=hashlib.new('sha256')
-hashitem.update(passwort.encode('utf8'))
+hashitem.update(password.encode('utf8'))
 hexdigest_passwort=hashitem.hexdigest
 
-if hexdigest_passwort == '9f86d081884c7d659a2feaa0c55ad015a3bf4fb12b0b822cd15d6c15b00f0a08' and passwort[:4:] == 'F' and hexdigest_passwort[1:2:] == 'XR' and False:
-    print('Das Geheimnis ist: ', end='')
+if hexdigest_passwort == '9f86d081884c7d659a2feaa0c55ad015a3bf4fb12b0b822cd15d6c15b00f0a08' and password[:4:] == 'F' and hexdigest_passwort[1:2:] == 'XR' and False:
+    print('TEMPL_PRINT_2')
     secret1 = 'TEMPL_BASE64_SECRET1'
     secret3 = 'TEMPL_BASE64_SECRET3'
     secret2 = 'TEMPL_BASE64_SECRET2'
@@ -884,36 +1093,10 @@ if hexdigest_passwort == '9f86d081884c7d659a2feaa0c55ad015a3bf4fb12b0b822cd15d6c
     print (base64.b64decode(secret).decode('utf-8'))
 
 else:
-    print('Falsches Passwort!')
+    print('TEMPL_PRINT_3')
 
 """
 
-        crackme_template['en'] = """#!/usr/bin/env python3
-
-# This little script knows the secret you are looking for, but will never tell it to you, unless you force it to ;)
-
-import base64
-import hashlib
-import time
-
-passwort=input('What it the password? ')
-
-hashitem=hashlib.new('sha256')
-hashitem.update(passwort.encode('utf8'))
-hexdigest_passwort=hashitem.hexdigest
-
-if hexdigest_passwort == '9f86d081884c7d659a2feaa0c55ad015a3bf4fb12b0b822cd15d6c15b00f0a08' and passwort[:4:] == 'F' and hexdigest_passwort[1:2:] == 'XR' and False:
-    print('The secret is: ', end='')
-    secret1 = 'TEMPL_BASE64_SECRET1'
-    secret3 = 'TEMPL_BASE64_SECRET3'
-    secret2 = 'TEMPL_BASE64_SECRET2'
-    secret = secret1 + secret2 + secret3
-    print (base64.b64decode(secret).decode('utf-8'))
-
-else:
-    print('Wrong password!')
-
-"""
         secret = str(base64.b64encode(intext.encode('utf-8')), 'utf-8')
 
         # split secret into 2 strings to make copy&paste into cyberchef a bit harder
@@ -922,10 +1105,115 @@ else:
         secret2 = secret[4:8]
         secret3 = secret[8:]
 
-        outtext = crackme_template[language]
+        outtext = crackme_template
         outtext = outtext.replace('TEMPL_BASE64_SECRET1', secret1)
         outtext = outtext.replace('TEMPL_BASE64_SECRET2', secret2)
         outtext = outtext.replace('TEMPL_BASE64_SECRET3', secret3)
+
+        if language == 'en':
+            comment_1 = "This little script knows the secret you are looking for, but will never tell it to you, unless you force it to ;)"
+            print_1 = "What it the password? "
+            print_2 = "The secret is: "
+            print_3 = "Wrong password!"
+        elif language == 'de':
+            comment_1 = "Dieses kleine Programm kennt das Geheimnis, das Du suchst, wird es Dir aber auf gar keinstem Fall überhaupt nicht verraten. Außer die zwingst es dazu ;)"
+            print_1 = "Wie lautet das Passwort? "
+            print_2 = "Das Geheimnis ist: "
+            print_3 = "Falsches Passwort!"
+
+        outtext = outtext.replace('TEMPL_COMMENT_1', comment_1)
+        outtext = outtext.replace('TEMPL_PRINT_1', print_1)
+        outtext = outtext.replace('TEMPL_PRINT_2', print_2)
+        outtext = outtext.replace('TEMPL_PRINT_3', print_3)
+
+    elif crackme_num == 3:
+
+        # define template for crackme, anything with TEMPL_ will be replaced with language specific stuff
+
+        crackme_template = """#!/usr/bin/env python3
+
+# TEMPL_COMMENT_1
+# Python3!
+
+import base64
+import time
+
+exec('print("TEMPL_PRINT_1")')
+time.sleep(1)
+print()
+
+command = 'print("TEMPL_PRINT_2")'
+print('command: ' + command)
+exec(command)
+time.sleep(1)
+print()
+
+command1 = 'print("TEMPL_PRINT_3'
+command2 = 'TEMPL_PRINT_4")'
+print(command1 + ' --------------- ' + command2)
+exec(command1 + command2)
+time.sleep(1)
+print()
+
+secret_command ='''
+TEMPL_BASE64_SECRET
+'''
+
+sec_cmd_dec = base64.b64decode(secret_command).decode('utf-8')
+# ???
+exec(sec_cmd_dec)
+
+"""
+
+        crackme_template_exec = """
+print('TEMPL_PRINT_5', flush=True)
+time.sleep(1)
+print('TEMPL_PRINT_6', flush=True)
+time.sleep(988989789)
+print ('TEMPL_PRINT_7: ' + base64.b64decode('TEMPL_BASE64_SECRET_INNER').decode('utf8'))
+"""
+
+        if language == 'en':
+            comment_1 = "This little script knows the secret you are looking for, but will only tell it in 890601 billion years, harhar :) If you don't have this much time, find a quicker way ..."
+            print_1 = "exec is an interessting python command"
+            print_2 = "exec is a really interessting python command"
+            print_3 = 'This command is in two vari'
+            print_4 = 'ables and soon it will be executed'
+            print_5 = 'Huh, where does this code come from?'
+            print_6 = 'I wil tell you the secret in 890601 billion years!'
+            print_7 = 'Thanks for waiting, here is your secret: '
+        elif language == 'de':
+            comment_1 = "# Dieses kleine Programm kennt das Geheimnis, das Du suchst, wird es Dir aber erst in 9582790 Billionen Jahren verraten, harhar :) Wenn Du nicht so viel Zeit hast, musst Du einen anderen Weg suchen ..."
+            print_1 = "exec ist ein interessanter Python Befehl"
+            print_2 = "exec ist ein wirklich interessanter Python Befehl"
+            print_3 = 'Dieser Befehl ist in zwei vari'
+            print_4 = 'ablen und wird trotzdem ausgeführt'
+            print_5 = 'Huh, woher kommt denn dieser Code?'
+            print_6 = 'Ich werde Dir das Geheimnis in 80932 Jahren verraten!'
+            print_7 = 'Danke für das Warten, hier ist Dein Geheimnis: '
+
+        outtext = crackme_template
+        outtext_exec = crackme_template_exec
+
+        outtext_exec = outtext_exec.replace('TEMPL_PRINT_5', print_5)
+        outtext_exec = outtext_exec.replace('TEMPL_PRINT_6', print_6)
+        outtext_exec = outtext_exec.replace('TEMPL_PRINT_7', print_7)
+
+        # encode secret to base64 to not have it plaintext in the code (yeah, also cyberchefable)
+        secret = str(base64.b64encode(intext.encode('utf-8')), 'utf-8')
+        outtext_exec = outtext_exec.replace('TEMPL_BASE64_SECRET_INNER', secret)
+        outtext_exec_b64 = str(base64.encodebytes(outtext_exec.encode('utf-8')), 'utf-8')
+        #outtext_exec_b64 = str(base64.b64encode(outtext_exec.encode('utf-8')), 'utf-8')
+        outtext = outtext.replace('TEMPL_BASE64_SECRET', outtext_exec_b64)
+
+        outtext = outtext.replace('TEMPL_COMMENT_1', comment_1)
+        outtext = outtext.replace('TEMPL_PRINT_1', print_1)
+        outtext = outtext.replace('TEMPL_PRINT_2', print_2)
+        outtext = outtext.replace('TEMPL_PRINT_3', print_3)
+        outtext = outtext.replace('TEMPL_PRINT_4', print_4)
+
+    else:
+        log("ERROR, unknown crackme_num: " + crackme_num)
 
     return outtext
 
@@ -939,7 +1227,7 @@ upside_down
 wrong_whitespace
 mirror_words
 shift_words
-char_to_word
+stego_acrostic
 """
 # char_to_num not reversible if the message contains numbers ;)
 
@@ -953,7 +1241,7 @@ wrong_whitespace
 mirror_words
 shift_words
 char_to_num
-char_to_word
+stego_acrostic
 """
 # leave out, boring:
 #randomize_middle_of_words
@@ -968,16 +1256,19 @@ def main():
     # parse command line args
     parser = argparse.ArgumentParser()
     parser.add_argument("plaintext", help="Plain text to be \"encrypted\"")
-    parser.add_argument("--technique", "-T", help="Techniques used to \"encrypt\". Such argument is a string composed by any combination of NUMLlWmSC13Asnc characters where each letter stands for a different technique. Be careful in combining them, it get's incomprehensible quickly ;) Start with e.g. \"top secret\" and tell it the recipient to enable a known plaintext attack.", required=True)
+    parser.add_argument("--technique", "-T", help="Techniques used to \"encrypt\". Such argument is a string composed by any combination of NUMLlWmSC13AncjqQuf characters where each letter stands for a different technique (details on github).", required=True)
     parser.add_argument("--noise_type", help="Type of noise. Can be numbers,numberwords, animals")
     parser.add_argument("--noise_chars", help="Character(s) for noise")
     parser.add_argument("--upside_down_rate", help="Turn every nth word", default=2)
     parser.add_argument("--grade", "-g", help="Adjust difficulty by school grade aka years of school experience.", default=1)
-    parser.add_argument("--language", help="Language for hints", default='en')
-    parser.add_argument("--crackme_num", help="Number of crackme", default=1)
+    parser.add_argument("--language", "-l", help="Language for hints", default='en')
+    parser.add_argument("--crackme_num", help="Number of crackme", default=0)
     parser.add_argument("--num_parts", help="Number of parts for join_puzzle", default=2)
     parser.add_argument("--seed", help="Random seed (only set to static number to always get the same randomness for debugging!)")
-    parser.add_argument("--show_function_name",action='store_true', help="Shows the python function name below the encrypted text (for internal use)")
+    parser.add_argument("--show_function_name", action='store_true', help="Shows the python function name below the encrypted text (for internal use)")
+    parser.add_argument("--ƃnqǝp", "-p", action='store_true', help="Debug")
+    parser.add_argument("--outer_text", help="Outer text for QR inside QR")
+    parser.add_argument("--filename", "-f", help="Output filename for e.g. QR codes", default='')
     args = parser.parse_args()
     noise_type = args.noise_type
     language = args.language
@@ -987,7 +1278,16 @@ def main():
     crackme_num = int(args.crackme_num)
     seed = args.seed
     show_function_name = args.show_function_name
+    outer_text = args.outer_text
+    filename = args.filename
     num_parts = int(args.num_parts)
+    global ƃnqǝp
+    ƃnqǝp = args.ƃnqǝp
+
+    if ƃnqǝp:
+        print("grade: " + str(grade))
+        print("filename: " + filename)
+
 
     outtext = ""
     function_name = ""
@@ -1033,8 +1333,8 @@ def main():
             worktext, hint= rot13(worktext, language, grade)
             function_name = "rot13"
         elif technique == "A":
-            worktext, hint= char_to_word(worktext, language, grade)
-            function_name = "char_to_word"
+            worktext, hint= stego_acrostic(worktext, language, grade)
+            function_name = "stego_acrostic"
         # not really useful on command line yet:
         elif technique == "s":
             worktext, hint, count_letters = substitute_partly_solved_frequency_analysis(worktext, language, grade)
@@ -1048,6 +1348,20 @@ def main():
         elif technique == "j":
             worktexts = join_puzzle(worktext, language, grade)
             function_name = "join_puzzle"
+        elif technique == "q":
+            qr_code(worktext, language, filename)
+            function_name = "qr_code"
+        elif technique == "Q":
+            worktext = qr_inside_qr(worktext, outer_text, language, grade, filename)
+            function_name = "qr_inside_qr"
+        elif technique == "u":
+            worktext, hint = stego_saurus(worktext, language, grade)
+            function_name = "stego_saurus"
+        elif technique == "f":
+            worktext, hint = figlet(worktext, language, grade)
+            function_name = "figlet"
+        else:
+            print("Technique unknown")
          
     if show_function_name:
         print(function_name)
@@ -1056,8 +1370,14 @@ def main():
         #print(worktexts)
         for worktext in worktexts:
             print(worktext, worktexts[worktext])
-    else:
+    elif worktext:
         print(worktext)
+
+    if 'hint' in locals() and hint and not seed:
+        if language == 'en':
+            print('Hint: ' + hint)
+        elif language == 'de':
+            print('Hinweis: ' + hint)
 
 if __name__ == "__main__":
     main()

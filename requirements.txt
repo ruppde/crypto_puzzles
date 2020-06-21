@@ -1,3 +1,4 @@
 upsidedown
 pyqrcode
+pyfiglet
 roman

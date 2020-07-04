@@ -20,9 +20,13 @@ Scanning the outer QR code gives a hint on how to scan the inner one. The follow
 
 ![QR in QR, grade 2](examples/qr_in_qr_grade_2.png)
 
+For the experimental feature to nest three QR codes inside each other, see (Matryoshka QR codes](matryoshka_qr.md))
+
+## Difficulty
+
 The school grades are just a rough estimate which kids should be able to tackle which level. Of course this also depends on your national school system and puzzling experience of the kids. In doubt start low to keep it fun and avoid frustration. There isn't a minimum age or grade but kids should be able to read fluently to enjoy the puzzles.
 
-Other examples:
+### Other examples
 ([complete list](<https://htmlpreview.github.io/?https://github.com/2d4d/crypto_puzzles/blob/master/examples/Examples.html>))
 
 #### a) Transposition ciphers
@@ -131,7 +135,7 @@ optional arguments:
   --technique TECHNIQUE, -T TECHNIQUE
                         Techniques used to "encrypt". Such argument is a
                         string composed by any combination of
-                        NUMLlWmSC13AncjqQuf characters where each letter
+                        NUMLlWmSC13AncjqQRuf characters where each letter
                         stands for a different technique (details on github).
   --noise_type NOISE_TYPE
                         Type of noise. Can be numbers,numberwords, animals

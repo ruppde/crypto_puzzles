@@ -743,9 +743,10 @@ def qr_code(intext, language, filename='qr.png'):
     # size of qr code
     # don't make it too small because some cheap kids smartphones with fix focus lenses aren't good at macro mode.
     # too big uses more ink
-    scale = 4
+    scale = 3
 
     # set maximum error correction for better reading if parts of the QR code are crumbled or missing
+    #qr = pyqrcode.create(intext, encoding='utf-8', mode='binary', error='L')
     qr = pyqrcode.create(intext, encoding='utf-8', mode='binary', error='H')
 
     # set color to grey to save ink at printing
@@ -758,11 +759,11 @@ def qr_code(intext, language, filename='qr.png'):
 
 def qr_inside_qr(innertext, outertext, language, grade, filename):
 
-    if not filename: 
-        filename='qr_in_qr.png'
-
     # create big QR code with small QR in the middle and save to png. 
     # this puzzles gives no hint in text form, but it's put into the outer QR
+
+    if not filename: 
+        filename='qr_in_qr.png'
 
     # outer QR is always light grey to save ink at printing. default for inner is the same grey
     color_inner=[100, 100, 100]
@@ -829,6 +830,7 @@ def qr_inside_qr(innertext, outertext, language, grade, filename):
     # set maximum error correction because redundancy is needed to make up for the pixels hidden by the small qr in the middle
     outer_qr = pyqrcode.create(outertext, encoding='utf-8', mode='binary', error='H')
 
+
     # set color to grey to save ink at printing
     # no border for the inner qr to make it seamless
     inner_qr_file = '/tmp/qr_inner_tmp.png'
@@ -863,6 +865,147 @@ def qr_inside_qr(innertext, outertext, language, grade, filename):
         print("saved file: " + filename)
 
     return filename
+
+def qr_really_inside_qr(intext, language, grade):
+
+    # experimental! Needs some more tweaking!
+    #
+    # create unicode QR code from intext using quadrant symbols, e.g.:
+    # ▗▄▄▄▗▖▗▗▄▄▄
+    # ▐▗▄▐▗▚▐▐▗▄▐
+    # ▐▐█▐▐▄▌▐▐█▐
+    # ▐▄▄▟▗▗▗▐▄▄▟
+    # ▗▄▖▗▗▜▘▖▗▄▗
+    # ░▖▛▄▟▌▌▖▝░▟
+    # ▗▟▙▚▛▄▞▗▚▌▀
+    # ▗▄▄▄▝▝▌░▐░░
+    # ▐▗▄▐░▜▌▘▗▟▞
+    # ▐▐█▐▐░▄▛▘▀▘
+    # ▐▄▄▟▐▀▟▛▖▗▝
+    # The result is small enough to fit as text unicode input into another QR code, e.g. as PNG so you can use it in qr_inside_qr() with e.g.
+    # ./crypto_puzzles.py -T RQ "top secret"
+    # ... to have a unicode QR code inside a PNG QR code inside another PNGPNG QR code ;)
+    # Scanning the PNG shows the unicode QR on the screen of the smartphone. How good this 2nd QR can be read depends mainly on the formatting on the 1st QR reader app
+    # The displaying QR reader might introduce lines between the blocks. Varying the distance between both devices usually helps. 
+    # If that doesn't work, a fallback is always to copy the unicode QR into some text editor and format it using a monospaced font like courier and then read it.
+
+    # A working combination is "Lightning QR" on android  as 1st reader and default iphone reader to read from the android screen, a bit further away (to blur the lines between the blocks)
+
+    # store quadrant chars:
+    fp={}
+    fp['1000'] = '▘'
+    fp['1100'] = '▀'
+    fp['1110'] = '▛'
+    fp['0110'] = '▞'
+    fp['1010'] = '▌'
+    fp['0010'] = '▖'
+    fp['0100'] = '▝'
+    fp['0001'] = '▗'
+    fp['1001'] = '▚'
+    fp['1101'] = '▜'
+    fp['1111'] = '█'
+    fp['0111'] = '▟'
+    fp['1011'] = '▙'
+    fp['0011'] = '▄'
+    fp['0101'] = '▐'
+    # Most QR reader apps display the content in proportional fonts which is ok for all the 15 chars above because they have the same width even then.
+    # But there's no proper empty "space" with the same width, at least I haven't found one yet.
+    # I did some experiments with the different unicode whitespace characters but none of them had the same width in all font used by all QR reader apps as the quadrant characters. This light shade
+    # square worked best for my devices & apps:
+    fp['0000'] = '░'
+    #fp['0000'] = ' '
+    # using a single quadrant also works because of the error correction:
+    #fp['0000'] = '▘'
+    # spacing broken, as all with all unicode whitespace chars I tried:
+    #fp['0000'] = ' '
+
+    # generate QR code using minimum error correction to save space:
+    number = pyqrcode.create(intext, error='L')
+
+    # "render" QR code with with 0s and 1s:
+    # 000000000000000000000000000
+    # 011111110001001111011111110
+    # 010000010111001111010000010
+    # 010111010100000000010111010
+    # 010111010010000111010111010
+    # 010111010111010111010111010
+    # 010000010101001011010000010
+    # 011111110101010101011111110
+    # 000000000101100011000000000
+    # 011010011000101111011101100
+    # 011111100110000101110000010
+    # 011001110000011100000100110
+    # 000000100011111000101010100
+    # 000100110101111101110000000
+    # 001100101110111000101000110
+    # 010101011110101101001100010
+    # 001001000110001110011000110
+    # 011010110001010101111101010
+    # 000000000111011001000101010
+    # 011111110101001111010101110
+    # 010000010011010111000101100
+    # 010111010010011101111110000
+    # 010111010111110011000111000
+    # 010111010011001111011110010
+    # 010000010101001010000010000
+    # 011111110110111011101000110
+    # 000000000000000000000000000
+
+    # the small border with quiet_zone helps reading the ASCII QR on the smartphone screen a bit, maybe experiment a bit more ...
+    # quietzone=0 gives messed up lines on ios
+    quietzone=1
+    qr = number.text(quiet_zone=quietzone).split('\n')
+    # (max 32 characters with quiet_zone=1)
+    if quietzone==0:
+        del qr[-1]
+        qr.append('0' * len(qr[0]))
+
+    if 'ƃnqǝp' in globals() and ƃnqǝp:
+        print('\n'.join(qr))
+
+    # convert 01010101 to quadrant unicode chars
+    # (this code sucks and could probably be done with some slicing and map() but it works :)
+    line_num = 0
+    outtext = ""
+    lastline={}
+    for line in qr:
+        chunks = len(line)
+        chunk_size  = 2
+
+        # make num of chars in line even by appending a 0
+        if chunks/2 != int(chunks/2): 
+            line += '0'
+
+        for i in range(0, chunks, chunk_size):
+            # on even lines, just store chunks of 2 chars
+            if line_num / 2 == int(line_num / 2):
+                lastline[i] = line[i:i+chunk_size] 
+
+            # on odd lines, combine stored chunks and 2 chars of this line to get the right quadrant unicode char (▜ ▌ ▐  ▘▛ ▛ ▀ ▜▙▞▌)
+            else:
+                if 'ƃnqǝp' in globals() and ƃnqǝp:
+                    print(lastline[i] + line[i:i+chunk_size], end='' )
+
+                # don't "draw" last column because it's empty anyway if there's a border because of quiet_zone (to save size)
+                if i == chunks-1 and quietzone >= 1:
+                    pass
+                    #print(fp['empty'], end='')
+                else:
+                    bin = lastline[i] + line[i:i+chunk_size]
+                    outtext += fp[bin]
+
+        # append newline on every 2nd line
+        if line_num / 2 == int(line_num / 2):
+            outtext += '\n'
+
+        line_num += 1
+
+    if 'ƃnqǝp' in globals() and ƃnqǝp:
+        print(outtext)
+    
+
+    return outtext
+
 
 
 #def join_puzzle(intext, language, grade, player_names=['Alice', 'Bob', 'Carol'], noise=''):
@@ -1256,7 +1399,7 @@ def main():
     # parse command line args
     parser = argparse.ArgumentParser()
     parser.add_argument("plaintext", help="Plain text to be \"encrypted\"")
-    parser.add_argument("--technique", "-T", help="Techniques used to \"encrypt\". Such argument is a string composed by any combination of NUMLlWmSC13AncjqQuf characters where each letter stands for a different technique (details on github).", required=True)
+    parser.add_argument("--technique", "-T", help="Techniques used to \"encrypt\". Such argument is a string composed by any combination of NUMLlWmSC13AncjqQRuf characters where each letter stands for a different technique (details on github).", required=True)
     parser.add_argument("--noise_type", help="Type of noise. Can be numbers,numberwords, animals")
     parser.add_argument("--noise_chars", help="Character(s) for noise")
     parser.add_argument("--upside_down_rate", help="Turn every nth word", default=2)
@@ -1354,6 +1497,9 @@ def main():
         elif technique == "Q":
             worktext = qr_inside_qr(worktext, outer_text, language, grade, filename)
             function_name = "qr_inside_qr"
+        elif technique == "R":
+            worktext = qr_really_inside_qr(worktext, language, grade)
+            function_name = "qr_really_inside_qr"
         elif technique == "u":
             worktext, hint = stego_saurus(worktext, language, grade)
             function_name = "stego_saurus"

@@ -26,6 +26,7 @@ Created using:
 2. Because it's text, it can be put into another QR, this time a PNG image:
 
 ![Matryoshka QR2](examples/Matryoshka_qr2.png)
+
 Created using: 
 ```
 ./crypto_puzzles.py -T Rq "Thecookiesarehiddenintheredbowl!"

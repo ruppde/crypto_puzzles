@@ -20,7 +20,7 @@ Scanning the outer QR code gives a hint on how to scan the inner one. The follow
 
 ![QR in QR, grade 2](examples/qr_in_qr_grade_2.png)
 
-For the experimental feature to nest three QR codes inside each other, see (Matryoshka QR codes](matryoshka_qr.md))
+For the experimental feature to nest three QR codes inside each other, see [Matryoshka QR codes](matryoshka_qr.md)
 
 ## Difficulty
 

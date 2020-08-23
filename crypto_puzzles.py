@@ -732,7 +732,7 @@ def convert_num_to_number_words(intext, language):
         else:
             outtext += char
 
-    return outtext
+    return outtext.rstrip(' ')
 
 def qr_code(intext, language, filename='qr.png'):
 

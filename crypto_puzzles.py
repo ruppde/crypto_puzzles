@@ -2,6 +2,7 @@
 
 # crypto puzzles
 # encryption for fun, never use for anything serious!
+# Use utf8 save editor/IDE because it contains emoji
 # Copyright 2020 Arnim Rupp
 
 
@@ -34,6 +35,194 @@ from string import ascii_lowercase
 from collections import defaultdict
 from PIL import Image
 from math import sqrt
+
+# Beware, emoji look different depending on the plattform so only choose ones, where the character can be 
+# recognized everywhere
+# seperate by comas because grapheme cluster support in python sucks, see https://hsivonen.fi/string-length/
+# goal: have multiple options for common letters (ensirat) + don't use upside down because that's another function
+# while editing, beware of the right to left characters ;)
+emoji_letter={}
+emoji_letter['a'] ='🅰️,ค,🃑,₳,ꬃ' # small ⎃ ?
+emoji_letter['b'] ='🅱️,฿,𝔅,ᛒ,ℬ,ط'
+emoji_letter['c'] ='©️,☪️,¢,℃,🂬,𝄴,ᆮ'
+emoji_letter['d'] ='🌛'
+emoji_letter['e'] ='€,∈,📧,ℰ,モ' # 💶
+emoji_letter['f'] ='℉,🎏,ƒ,₣,ᚩ'
+emoji_letter['g'] ='Ⓖ,Ǥ,ﻮ,Ꮆ,₲'
+emoji_letter['h'] ='♓,ℏ,ዙ,ᚺ'
+emoji_letter['i'] ='ℹ️,🕕,𝔦,⌶,ï,༐'
+emoji_letter['j'] ='⤴️,🕙,ɉ,ʝ,🃛,𝔧,ڸ'
+emoji_letter['k'] ='Ⓚ,🃞,₭,㉿,ᛕ'
+emoji_letter['l'] ='🕒,🛴,Ⱡ,£,ட' # 💷
+emoji_letter['m'] ='♏,〽️,Ⓜ️,ℳ,₥,𝔐,ற,ᛖ'
+emoji_letter['n'] ='♑,ℕ,И,🅽,ŋ,ᾗ,₦'
+emoji_letter['o'] ='⭕,🍩,💍,𝔬'
+emoji_letter['p'] ='🅿️,₱,🆊,₱,₽,𝔭,ᚹ'
+emoji_letter['q'] ='Ǭ,Ɋ,🂭,𝔮'
+emoji_letter['r'] ='®️,Ȑ,Ɽ,ℜ,ℛ,ᚱ'
+emoji_letter['s'] ='⚡,💲,💰,⑀,ى' # small 💵?
+emoji_letter['t'] ='✝️,ƫ,ȶ,🆃,Ṭ,₮,𝔱,⍑,ァ,ኘ,ፖ'
+emoji_letter['u'] ='ᶙ,⛎'
+emoji_letter['v'] ='♈,✌'
+emoji_letter['w'] ='〰️,₩,௰' # not like w on some systems: 🔱
+emoji_letter['x'] ='❌,❎,⚒,🛠,⚔️,✖,⤫,𝔛,྾,ᚸ' # 🙅‍♀️ is bad because sometimes displayed as '🙅‍♀️♀️' in ubuntu (broken grapheme clustering?)
+emoji_letter['y'] ='¥,💴,Ŷ,⑂,ℽ,Ỿ,Ӳ'
+emoji_letter['z'] ='Ƶ,ʑ,ɀ,💤,ᶽ'
+emoji_letter['ä'] ='Ἂ,Ȁ'
+emoji_letter['ö'] ='ő,⍥,ȫ,Ӫ,ة'
+emoji_letter['ü'] ='ű,Ǚ,ت'
+emoji_letter['ß'] ='ẞ'
+emoji_letter['1'] ='🥇,❶' #1️⃣ boring ... dice 1 ⚀ hard to recognize, very small ♳♴♵ ?
+emoji_letter['2'] ='🥈,➁,🂲,⚁,ᆯ,༢' #2️⃣
+emoji_letter['3'] ='🥉,ᗱ,⚂,༣' #3️⃣
+emoji_letter['4'] ='4️⃣,ᔰ,🂴,⚃'
+emoji_letter['5'] ='5️⃣,Ƽ,🃅,⚄,༥'
+emoji_letter['6'] ='6️⃣,➅,🃖,⚅'
+emoji_letter['7'] ='7️⃣,⑦,🂷,ㇴ'
+emoji_letter['8'] ='∞,🎱,𝟠'
+emoji_letter['9'] ='9️⃣,⑨'
+emoji_letter['0'] ='🅾️,Ѳ' # 0️⃣
+
+# might be too confusing?
+#emoji_letter['10'] ='🔟'
+#emoji_letter['11'] ='⓫'
+# ...
+#emoji_letter_multiple['100'] ='💯'
+# domino, mahjong numbers also confusing: http://xahlee.info/comp/unicode_games_cards.html ?? for higher grades?
+
+emoji_letter['*'] ='*️⃣✳️'
+emoji_letter['#'] ='#️⃣'
+emoji_letter['+'] ='➕'
+emoji_letter['-'] ='➖'
+emoji_letter['/'] ='➗'
+emoji_letter['!'] ='❕,❗️'
+emoji_letter['?'] ='❓,�'
+
+emoji_letter_multiple={}
+emoji_letter_multiple['ii'] ='ⅱ'
+emoji_letter_multiple['iv'] ='ⅳ'
+emoji_letter_multiple['vi'] ='ⅵ'
+emoji_letter_multiple['ⅶ'] ='ⅶ'
+emoji_letter_multiple['ix'] ='ⅸ'
+emoji_letter_multiple['xi'] ='ⅺ'
+emoji_letter_multiple['sm'] ='℠'
+emoji_letter_multiple['tm'] ='™️'
+emoji_letter_multiple['!?'] ='⁉️'
+emoji_letter_multiple['!!'] ='‼️'
+emoji_letter_multiple['ab'] ='🆎'
+emoji_letter_multiple['ae'] ='ᴭ'
+emoji_letter_multiple['fi'] ='ﬁ'
+emoji_letter_multiple['fl'] ='ﬂ'
+emoji_letter_multiple['cl'] ='🆑'
+emoji_letter_multiple['sos'] ='🆘'
+emoji_letter_multiple['vs'] ='🆚'
+emoji_letter_multiple['id'] ='🆔'
+emoji_letter_multiple['ok'] ='🆗'
+emoji_letter_multiple['ng'] ='🆖'
+emoji_letter_multiple['abc'] ='🔤'
+emoji_letter_multiple['cool'] ='🆒'
+emoji_letter_multiple['free'] ='🆓'
+emoji_letter_multiple['new'] ='🆕'
+emoji_letter_multiple['atm'] ='🏧'
+emoji_letter_multiple['back'] ='🔙'
+emoji_letter_multiple['end'] ='🔚'
+emoji_letter_multiple['soon'] ='🔜'
+emoji_letter_multiple['top'] ='🔝'
+emoji_letter_multiple['on'] ='🔛'
+emoji_letter_multiple['tel'] ='℡'
+emoji_letter_multiple['ds'] ='𝄉'
+emoji_letter_multiple['dc'] ='𝄊'
+emoji_letter_multiple['tr'] ='𝆖'
+emoji_letter_multiple['aa'] ='⎂'
+emoji_letter_multiple['no'] ='№'
+emoji_letter_multiple['rs'] ='₨'
+emoji_letter_multiple['ce'] ='₠' # Œ
+# booooring:
+#emoji_letter_multiple['nm'] ='㎚'
+#emoji_letter_multiple['mm'] ='㎜'
+#emoji_letter_multiple['cm'] ='㎝'
+#emoji_letter_multiple['km'] ='㎞' # ㏎
+emoji_letter_multiple['ml'] ='㎖'
+emoji_letter_multiple['dl'] ='㎗'
+emoji_letter_multiple['kl'] ='㎘'
+#emoji_letter_multiple['cc'] ='㏄'
+#emoji_letter_multiple['ps'] ='㎰'
+#emoji_letter_multiple['ns'] ='㎱'
+#emoji_letter_multiple['ms'] ='㎳'
+#emoji_letter_multiple['mg'] ='㎎'
+#emoji_letter_multiple['kg'] ='㎏'
+#emoji_letter_multiple['kb'] ='㎅'
+#emoji_letter_multiple['mb'] ='㎆' # ㏔ 
+#emoji_letter_multiple['gb'] ='㎇'
+#emoji_letter_multiple['hz'] ='㎐' # ㎑ ㎒ ㎓  shouldn't come up in normal words
+emoji_letter_multiple['thz'] ='㎔'
+#emoji_letter_multiple['pv'] ='㎴'
+#emoji_letter_multiple['nv'] ='㎵'
+#emoji_letter_multiple['mv'] ='㎷'
+#emoji_letter_multiple['kv'] ='㎸'
+#emoji_letter_multiple['mv'] ='㎹'
+#emoji_letter_multiple['pw'] ='㎺'
+#emoji_letter_multiple['nw'] ='㎻'
+#emoji_letter_multiple['mw'] ='㎽' # ㎿
+#emoji_letter_multiple['kw'] ='㎾'
+#emoji_letter_multiple['pa'] ='㎀' # ㎩
+#emoji_letter_multiple['na'] ='㎁'
+#emoji_letter_multiple['ma'] ='㎃'
+#emoji_letter_multiple['ka'] ='㎄'
+emoji_letter_multiple['rad'] ='㎭'
+emoji_letter_multiple['kpa'] ='㎪'
+emoji_letter_multiple['mpa'] ='㎫'
+emoji_letter_multiple['gpa'] ='㎬'
+emoji_letter_multiple['cal'] ='㎈' # ㎉
+#emoji_letter_multiple['dm'] ='dm'
+emoji_letter_multiple['mil'] ='㏕'
+emoji_letter_multiple['fm'] ='㎙'
+#emoji_letter_multiple['au'] ='㍳'
+emoji_letter_multiple['db'] ='㏈'
+#emoji_letter_multiple['ln'] ='㏑'
+emoji_letter_multiple['log'] ='㏒'
+emoji_letter_multiple['am'] ='㏂'
+emoji_letter_multiple['pm'] ='㏘'
+emoji_letter_multiple['hpa'] ='㍱'
+#emoji_letter_multiple['da'] ='㍲'
+emoji_letter_multiple['bar'] ='㍴'
+#emoji_letter_multiple['ov'] ='㍵'
+#emoji_letter_multiple['pc'] ='㍶'
+#emoji_letter_multiple['IU'] ='㍺'
+#emoji_letter_multiple['pf'] ='㎊'
+#emoji_letter_multiple['nf'] ='㎋'
+#emoji_letter_multiple['bq'] ='㏃'
+#emoji_letter_multiple['cd'] ='㏅'
+emoji_letter_multiple['co'] ='㏇'
+#emoji_letter_multiple['gy'] ='㏉'
+#emoji_letter_multiple['ha'] ='㏊'
+emoji_letter_multiple['hp'] ='㏋'
+emoji_letter_multiple['kk'] ='㏍'
+#emoji_letter_multiple['kt'] ='㏏'
+#emoji_letter_multiple['lm'] ='㏐'
+#emoji_letter_multiple['lx'] ='㏓'
+emoji_letter_multiple['mol'] ='㏖'
+#emoji_letter_multiple['ph'] ='㏗'
+#emoji_letter_multiple['pr'] ='㏚'
+#emoji_letter_multiple['sr'] ='㏛'
+#emoji_letter_multiple['sv'] ='㏜'
+#emoji_letter_multiple['wb'] ='㏝'
+emoji_letter_multiple['hu'] ='Ƕ'
+#emoji_letter_multiple['dz'] ='Ǳ'
+emoji_letter_multiple['oe'] ='œ'
+emoji_letter_multiple['ts'] ='ʦ'
+emoji_letter_multiple['dz'] ='ʥ'
+emoji_letter_multiple['th'] ='ᵺ'
+emoji_letter_multiple['ue'] ='ᵫ'
+emoji_letter_multiple['ls'] ='ʪ'
+emoji_letter_multiple['fn'] ='ʩ'
+emoji_letter_multiple['lz'] ='ʫ'
+emoji_letter_multiple['ww'] ='ʬ'
+emoji_letter_multiple['le'] ='ᇉ' # korean
+emoji_letter_multiple['lc'] ='ᇆ'
+# too small: 𝆮 ?
+
+
 
 
 number_words={}
@@ -1069,6 +1258,38 @@ def deumlaut(text):
     text = text.replace('ß','ss')
     return text
 
+def emoji_alphabet(intext, language, grade):
+#def ∈♏💍🕙ℹ️_ค🛴₱♓🆎∈✝️(intext, language, grade):)
+
+    # top secret => 🔝  💰 € ☪️ ®️ 📧 ȶ
+             
+    outtext=intext.lower()
+
+    # +' ' to have a space between emoji because kerning is wrong on some platforms
+    spacing=' '
+    if spacing:
+        outtext = outtext.replace(' ', '  ')
+
+    # multiple letters at once, e.g. "id" => 🆔
+    # use .replace()
+    for multi_letter in emoji_letter_multiple:
+        outtext = outtext.replace(multi_letter, emoji_letter_multiple[multi_letter])
+
+    # single letters, 
+    # iterate over text
+    outtext_new=""
+    for char in outtext:
+
+        if char in emoji_letter:
+            # choose random letter of multiple e.g. m=Ⓜ️ 〽️ ♏ 
+            outtext_new += random.choice(emoji_letter[char].split(',')) + spacing
+        else:
+            outtext_new += char + spacing
+            
+            
+            
+    return outtext_new, ""
+
 def figlet(intext, language, grade, font='ivrit'):
 
     outtext = ''
@@ -1506,6 +1727,9 @@ def main():
         elif technique == "f":
             worktext, hint = figlet(worktext, language, grade)
             function_name = "figlet"
+        elif technique == "e":
+            worktext, hint = emoji_alphabet(worktext, language, grade)
+            function_name = "emoji_alphabet"
         else:
             print("Technique unknown")
          

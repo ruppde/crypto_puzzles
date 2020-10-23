@@ -8,7 +8,7 @@ import os
 import argparse
 
 # techniques used via --technique param of crypto_puzzles.py (also determines the order they appear in the resulting page)
-techniques='UflWuSCc1A3MNQ'
+techniques='eUflWuSCc1A3MNQ'
 # unused for various reasons: techniques='Lmnj'
 # technique 's' doesn't work here, 'm' boring
 
@@ -88,6 +88,10 @@ for technique in techniques:
 
         if markdown:
             ciphertext = escape_markdown(ciphertext.rstrip())
+
+        # put hard spaces in here because otherwise they're not properly visible in the rendered HTML
+        if 'emoji' in function_name:
+            ciphertext = ciphertext.replace(' ', '&nbsp;')
 
         if res != last_res:
             if not create_function_list:

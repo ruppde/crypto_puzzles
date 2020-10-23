@@ -105,6 +105,8 @@ So far the crackmes are only in python, as this is the most popular programming 
 
 Of course lots of antique and classical kids ciphers are still missing. Contributions are always welcome! If you want to contribute another crypto function, the easiest way is to copy an existing similar one and change it.
 
+Use an editor/IDE with full utf8 support because of all the funny characters in the code.
+
 Functions which are language dependent are supported in English and German so far.
 
 ## Purpose

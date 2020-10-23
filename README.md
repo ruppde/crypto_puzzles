@@ -4,6 +4,8 @@ Crypto Puzzles is a tool and library to provide a bunch of functions for encrypt
 
 Most easy ciphers require zero knowledge about the algorithm used. These puzzles can be "cracked" without any boring explanation, tables or tools. It should be sufficient to know that the the first words are always the same, e.g. "Top secret" to find the pattern and figure out how the secret code works. This makes it possible to decrypt the rest of the message. (Cryptographers would call it a known plaintext attack.) 
 
+Here's a running instanceof the [web interface](<http://rupp.de/crypto_puzzles/crypto_puzzles_web.py>) which supports most of the functions.
+
 Example sentence:
 
   ```opT ecret!s heT ookiesc rea iddenh ni het edr owl!b```

@@ -16,7 +16,7 @@ max_grade=12
 cp_path='./crypto_puzzles.py'
 
 #plaintext = 'Top secret!'
-plaintext = 'Top secret! The cookies are hidden in the red bowl!'
+plaintext = 'Top secret! The sweets are hidden under your chair!'
 
 
 def escape_markdown(md):
@@ -71,6 +71,10 @@ for technique in techniques:
 
         # execute crypto_puzzles.py in external process
         res = os.popen(cmd_real).readlines()
+
+        if 'filename' in locals():
+            os.rename(filename, './examples/' + filename)
+
 
         function_name = res.pop(0)
         ciphertext = ''.join(res)

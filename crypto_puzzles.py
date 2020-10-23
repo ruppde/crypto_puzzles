@@ -1360,7 +1360,7 @@ def stego_saurus(intext, language, grade):
     return saurus, hint
 
 
-def generate_crackme_python(intext, language, grade, crackme_num):
+def generate_crackme_python(intext, language, grade, crackme_num=0):
 
     # generates easy crackmes in python3 for beginers. Can be made to print the secret by changing 1+ lines of code
     # for contributors: remember that understanding foreign code is a challenge in itself for beginers
@@ -1579,7 +1579,12 @@ print ('TEMPL_PRINT_7: ' + base64.b64decode('TEMPL_BASE64_SECRET_INNER').decode(
     else:
         log("ERROR, unknown crackme_num: " + crackme_num)
 
-    return outtext
+    if language == 'en':
+        hint="Run with Python"
+    elif language == 'de':
+        hint="Mit Python ausführen"
+
+    return outtext, hint
 
 
 def get_crypto_functions(type='all'):
@@ -1707,7 +1712,7 @@ def main():
             worktext = convert_num_to_number_words(worktext, language)
             function_name = "convert_num_to_number_words"
         elif technique == "c":
-            worktext = generate_crackme_python(worktext, language, grade, crackme_num)
+            worktext, hint = generate_crackme_python(worktext, language, grade, crackme_num)
             function_name = "generate_crackme_python"
         elif technique == "j":
             worktexts = join_puzzle(worktext, language, grade)

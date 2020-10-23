@@ -2,3 +2,4 @@ upsidedown
 pyqrcode
 pyfiglet
 roman
+Pillow

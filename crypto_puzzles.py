@@ -45,7 +45,7 @@ emoji_letter={}
 emoji_letter['a'] ='🅰️,ค,🃑,₳,ꬃ' # small ⎃ ?
 emoji_letter['b'] ='🅱️,฿,𝔅,ᛒ,ℬ,ط'
 emoji_letter['c'] ='©️,☪️,¢,℃,🂬,𝄴,ᆮ'
-emoji_letter['d'] ='🌛'
+emoji_letter['d'] ='🌛,ԃ,Đ'
 emoji_letter['e'] ='€,∈,📧,ℰ,モ' # 💶
 emoji_letter['f'] ='℉,🎏,ƒ,₣,ᚩ'
 emoji_letter['g'] ='Ⓖ,Ǥ,ﻮ,Ꮆ,₲'
@@ -94,57 +94,59 @@ emoji_letter['*'] ='*️⃣✳️'
 emoji_letter['#'] ='#️⃣'
 emoji_letter['+'] ='➕'
 emoji_letter['-'] ='➖'
-emoji_letter['/'] ='➗'
+#emoji_letter[':'] ='' # ??? 
+emoji_letter['/'] ='／'
 emoji_letter['!'] ='❕,❗️'
 emoji_letter['?'] ='❓,�'
 
 emoji_letter_multiple={}
-emoji_letter_multiple['ii'] ='ⅱ'
-emoji_letter_multiple['iv'] ='ⅳ'
-emoji_letter_multiple['vi'] ='ⅵ'
-emoji_letter_multiple['ⅶ'] ='ⅶ'
-emoji_letter_multiple['ix'] ='ⅸ'
-emoji_letter_multiple['xi'] ='ⅺ'
+# boooooring
+#emoji_letter_multiple['ii'] ='ⅱ'
+#emoji_letter_multiple['iv'] ='ⅳ'
+#emoji_letter_multiple['vi'] ='ⅵ'
+#emoji_letter_multiple['ⅶ'] ='ⅶ'
+#emoji_letter_multiple['ix'] ='ⅸ'
+#emoji_letter_multiple['xi'] ='ⅺ'
 emoji_letter_multiple['sm'] ='℠'
 emoji_letter_multiple['tm'] ='™️'
 emoji_letter_multiple['!?'] ='⁉️'
 emoji_letter_multiple['!!'] ='‼️'
-emoji_letter_multiple['ab'] ='🆎'
+emoji_letter_multiple['ab'] ='🆎,ab'  # replace ab by ab = keep it to have some variety, the ab will then be processed like single letters
 emoji_letter_multiple['ae'] ='ᴭ'
-emoji_letter_multiple['fi'] ='ﬁ'
-emoji_letter_multiple['fl'] ='ﬂ'
-emoji_letter_multiple['cl'] ='🆑'
-emoji_letter_multiple['sos'] ='🆘'
-emoji_letter_multiple['vs'] ='🆚'
-emoji_letter_multiple['id'] ='🆔'
-emoji_letter_multiple['ok'] ='🆗'
-emoji_letter_multiple['ng'] ='🆖'
-emoji_letter_multiple['abc'] ='🔤'
-emoji_letter_multiple['cool'] ='🆒'
-emoji_letter_multiple['free'] ='🆓'
-emoji_letter_multiple['new'] ='🆕'
-emoji_letter_multiple['atm'] ='🏧'
-emoji_letter_multiple['back'] ='🔙'
-emoji_letter_multiple['end'] ='🔚'
-emoji_letter_multiple['soon'] ='🔜'
-emoji_letter_multiple['top'] ='🔝'
-emoji_letter_multiple['on'] ='🔛'
-emoji_letter_multiple['tel'] ='℡'
-emoji_letter_multiple['ds'] ='𝄉'
-emoji_letter_multiple['dc'] ='𝄊'
-emoji_letter_multiple['tr'] ='𝆖'
-emoji_letter_multiple['aa'] ='⎂'
-emoji_letter_multiple['no'] ='№'
-emoji_letter_multiple['rs'] ='₨'
-emoji_letter_multiple['ce'] ='₠' # Œ
+emoji_letter_multiple['fi'] ='ﬁ,fi'
+emoji_letter_multiple['fl'] ='ﬂ,fl'
+emoji_letter_multiple['cl'] ='🆑,cl'
+emoji_letter_multiple['sos'] ='🆘,sos'
+emoji_letter_multiple['vs'] ='🆚,vs'
+emoji_letter_multiple['id'] ='🆔,id'
+emoji_letter_multiple['ok'] ='🆗,ok'
+emoji_letter_multiple['ng'] ='🆖,ng'
+emoji_letter_multiple['abc'] ='🔤,abc'
+emoji_letter_multiple['cool'] ='🆒,cool'
+emoji_letter_multiple['free'] ='🆓,free'
+emoji_letter_multiple['new'] ='🆕,new'
+emoji_letter_multiple['atm'] ='🏧,atm'
+emoji_letter_multiple['back'] ='🔙,back'
+emoji_letter_multiple['end'] ='🔚,end'
+emoji_letter_multiple['soon'] ='🔜,soon'
+emoji_letter_multiple['top'] ='🔝,top'
+emoji_letter_multiple['on'] ='🔛,on'
+emoji_letter_multiple['tel'] ='℡,tel'
+emoji_letter_multiple['ds'] ='𝄉,ds'
+emoji_letter_multiple['dc'] ='𝄊,dc'
+emoji_letter_multiple['tr'] ='𝆖,tr'
+emoji_letter_multiple['aa'] ='⎂,aa'
+emoji_letter_multiple['no'] ='№,no'
+emoji_letter_multiple['rs'] ='₨,rs'
+emoji_letter_multiple['ce'] ='₠,ce' # Œ
 # booooring:
 #emoji_letter_multiple['nm'] ='㎚'
 #emoji_letter_multiple['mm'] ='㎜'
 #emoji_letter_multiple['cm'] ='㎝'
 #emoji_letter_multiple['km'] ='㎞' # ㏎
-emoji_letter_multiple['ml'] ='㎖'
-emoji_letter_multiple['dl'] ='㎗'
-emoji_letter_multiple['kl'] ='㎘'
+emoji_letter_multiple['ml'] ='㎖,ml'
+emoji_letter_multiple['dl'] ='㎗,dl'
+emoji_letter_multiple['kl'] ='㎘,kl'
 #emoji_letter_multiple['cc'] ='㏄'
 #emoji_letter_multiple['ps'] ='㎰'
 #emoji_letter_multiple['ns'] ='㎱'
@@ -176,7 +178,7 @@ emoji_letter_multiple['gpa'] ='㎬'
 emoji_letter_multiple['cal'] ='㎈' # ㎉
 #emoji_letter_multiple['dm'] ='dm'
 emoji_letter_multiple['mil'] ='㏕'
-emoji_letter_multiple['fm'] ='㎙'
+#emoji_letter_multiple['fm'] ='㎙'
 #emoji_letter_multiple['au'] ='㍳'
 emoji_letter_multiple['db'] ='㏈'
 #emoji_letter_multiple['ln'] ='㏑'
@@ -1273,7 +1275,7 @@ def emoji_alphabet(intext, language, grade):
     # multiple letters at once, e.g. "id" => 🆔
     # use .replace()
     for multi_letter in emoji_letter_multiple:
-        outtext = outtext.replace(multi_letter, emoji_letter_multiple[multi_letter])
+        outtext = outtext.replace(multi_letter, random.choice(emoji_letter_multiple[multi_letter].split(','))  )
 
     # single letters, 
     # iterate over text
@@ -1736,7 +1738,7 @@ def main():
             worktext, hint = emoji_alphabet(worktext, language, grade)
             function_name = "emoji_alphabet"
         else:
-            print("Technique unknown")
+            print("Error: Technique unknown")
          
     if show_function_name:
         print(function_name)

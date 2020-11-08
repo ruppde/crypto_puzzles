@@ -123,12 +123,13 @@ if form.getvalue('message'):
     print(collect_html)
 
 else:
+
     print('''
 
 <form action=crypto_puzzles_web.py  method = "post">
 
 Secret message:
-<textarea name = "message" cols = "40" rows = "4">
+<textarea name = "message" cols = "80" rows = "2">
 Top secret! The sweets are hidden under your chair!
 </textarea>
 
@@ -137,7 +138,7 @@ Top secret! The sweets are hidden under your chair!
 <!--See <a href="https://htmlpreview.github.io/?https://github.com/2d4d/crypto_puzzles/blob/master/examples/Examples.html">example list</a> for what the functions do.-->
 See example list below for what the functions do.<br>
 
-<select name = "functions" multiple>
+<select name = "functions" size=16 multiple>
 ''', flush=True)
 
     for function in function_list:

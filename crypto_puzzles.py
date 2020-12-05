@@ -36,6 +36,7 @@ from collections import defaultdict
 from PIL import Image
 from math import sqrt
 
+# Emoji alphabet
 # Beware, emoji look different depending on the plattform so only choose ones, where the character can be 
 # recognized everywhere
 # seperate by comas because grapheme cluster support in python sucks, see https://hsivonen.fi/string-length/
@@ -225,6 +226,43 @@ emoji_letter_multiple['lc'] ='ᇆ'
 # too small: 𝆮 ?
 
 
+# Emoji animal alphabet, works in english and german 
+# include the disputed in a hard version someday
+# if you find animal emoji for the missing letters, please tell me on github (see also emoji_animals_sorted.txt)
+emoji_animal={}
+emoji_animal['a'] ='🐜'
+emoji_animal['b'] ='🐻'
+#emoji_animal['c'] ='©️,☪️,¢,℃,🂬,𝄴,ᆮ'
+emoji_animal['d'] ='🐬,🐉'
+emoji_animal['e'] ='🐘'
+emoji_animal['f'] ='🐟,🦊'
+emoji_animal['g'] ='🦒'
+emoji_animal['h'] ='🐹'
+#emoji_animal['i'] ='ℹ️,🕕,𝔦,⌶,ï,༐'
+#emoji_animal['j'] ='⤴️,🕙,ɉ,ʝ,🃛,𝔧,ڸ'
+emoji_animal['k'] ='🦘 ,🐨'
+emoji_animal['l'] ='🦁'
+# recognizable?
+#🐆 Leopard
+#🦙 Llama, everybody would say alpaka I guess :)
+emoji_animal['m'] ='🐁'
+#emoji_animal['n'] ='♑,ℕ,И,🅽,ŋ,ᾗ,₦'
+emoji_animal['o'] ='🐙'
+emoji_animal['p'] ='🦜 ,🦚 ,🐧,🐩'
+#emoji_animal['q'] ='Ǭ,Ɋ,🂭,𝔮'
+emoji_animal['r'] ='🐀'
+# rat is hard to distinguish from a mouse but the rhino is also hard in german because most people say nashorn
+# 🦏 Rhinoceros
+emoji_animal['s'] ='🦂,🐌,🐍,🕷️,🦢'
+emoji_animal['t'] ='🐅,🦖'
+# is the T-Rex recognizable? or just a "dino"?
+#emoji_animal['u'] ='ᶙ,⛎'
+#emoji_animal['v'] ='♈,✌'
+emoji_animal['w'] ='🐋,🐺'
+# 🐃 Water Buffalo, nobody would get this in german
+#emoji_animal['x'] ='❌,❎,⚒,🛠,⚔️,✖,⤫,𝔛,྾,ᚸ' # 🙅‍♀️ is bad because sometimes displayed as '🙅‍♀️♀️' in ubuntu (broken grapheme clustering?)
+#emoji_animal['y'] ='¥,💴,Ŷ,⑂,ℽ,Ỿ,Ӳ'
+emoji_animal['z'] ='🦓'
 
 
 number_words={}
@@ -1292,6 +1330,35 @@ def emoji_alphabet(intext, language, grade):
             
     return outtext_new, ""
 
+def emoji_alphabet_animals(intext, language, grade):
+
+    # top secret => TODO
+             
+    outtext=intext.lower()
+
+    # +' ' to have a space between emoji because kerning is wrong on some platforms
+    spacing=' '
+    if spacing:
+        outtext = outtext.replace(' ', '  ')
+
+    # single letters, 
+    # iterate over text
+    outtext_new=""
+    for char in outtext:
+
+        if char in emoji_animal:
+            # choose animal letter of multiple e.g. s=🦂,🐌,🐍,🕷️,🦢  (works in english in german)
+            outtext_new += random.choice(emoji_animal[char].split(',')) + spacing
+        # fall back to the normal emoji alphabet
+        elif char in emoji_letter:
+            # choose random letter of multiple e.g. m=Ⓜ️ 〽️ ♏ 
+            outtext_new += random.choice(emoji_letter[char].split(',')) + spacing
+        else:
+            outtext_new += char + spacing
+            
+            
+            
+    return outtext_new, ""
 def figlet(intext, language, grade, font='ivrit'):
 
     outtext = ''
@@ -1737,6 +1804,9 @@ def main():
         elif technique == "e":
             worktext, hint = emoji_alphabet(worktext, language, grade)
             function_name = "emoji_alphabet"
+        elif technique == "E":
+            worktext, hint = emoji_alphabet_animals(worktext, language, grade)
+            function_name = "emoji_alphabet_animals"
         else:
             print("Error: Technique unknown")
          

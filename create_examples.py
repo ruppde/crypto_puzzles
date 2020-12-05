@@ -8,7 +8,7 @@ import os
 import argparse
 
 # techniques used via --technique param of crypto_puzzles.py (also determines the order they appear in the resulting page)
-techniques='eUflWuSCc1A3MNQ'
+techniques='eEUflWuSCc1A3MNQ'
 # unused for various reasons: techniques='Lmnj'
 # technique 's' doesn't work here, 'm' boring
 

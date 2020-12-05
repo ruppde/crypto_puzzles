@@ -129,3 +129,6 @@ dmypy.json
 .pyre/
 todo_cp.txt
 *.swp
+qr.png
+qr_in_qr.png
+qr_in_qr.png

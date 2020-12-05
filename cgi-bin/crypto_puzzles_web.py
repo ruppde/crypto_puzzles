@@ -11,6 +11,7 @@ import crypto_puzzles
 # TODO: somehow get the order of handling multiple functions right, e.g. first rot13, then qr_code bec won't work the other way around
 function_list=[
 "emoji_alphabet",
+"emoji_alphabet_animals",
 "insert_noise",
 "upside_down",
 "randomize_middle_of_words",
@@ -123,13 +124,12 @@ if form.getvalue('message'):
     print(collect_html)
 
 else:
-
     print('''
 
 <form action=crypto_puzzles_web.py  method = "post">
 
 Secret message:
-<textarea name = "message" cols = "80" rows = "2">
+<textarea name = "message" cols = "40" rows = "4">
 Top secret! The sweets are hidden under your chair!
 </textarea>
 
@@ -141,8 +141,10 @@ See example list below for what the functions do.<br>
 <select name = "functions" size=16 multiple>
 ''', flush=True)
 
+    selected = " selected "
     for function in function_list:
-        print(' <option value = "' + function + '">' + function + '</option>')
+        print(' <option value = "' + function + '"' + selected + '>' + function + '</option>')
+        selected = ""
     print('''</select><br>
 <font size=-2>(You can select multiple functions by holding the Ctrl key while clicking but start with single ones.)</font><br>
 <p>

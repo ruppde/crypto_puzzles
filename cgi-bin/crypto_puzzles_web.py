@@ -10,6 +10,7 @@ import crypto_puzzles
 
 # TODO: somehow get the order of handling multiple functions right, e.g. first rot13, then qr_code bec won't work the other way around
 function_list=[
+"emoji_alphabet_xmas",
 "emoji_alphabet",
 "emoji_alphabet_animals",
 "insert_noise",
@@ -106,7 +107,7 @@ if form.getvalue('message'):
     collect_html += ('</ul>')
 
     worktext_escaped = html.escape(worktext) 
-    if function == "emoji_alphabet":
+    if function == "emoji_alphabet" or function == "emoji_alphabet_xmas":
         worktext_escaped = worktext_escaped.replace(' ', '&nbsp;')
 
     # multiline text gets different format:

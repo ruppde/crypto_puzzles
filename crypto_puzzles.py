@@ -225,6 +225,36 @@ emoji_letter_multiple['le'] ='ᇉ' # korean
 emoji_letter_multiple['lc'] ='ᇆ'
 # too small: 𝆮 ?
 
+############################################################
+emoji_letter_xmas={}
+emoji_letter_xmas['a'] ='🎄'
+emoji_letter_xmas['b'] ='฿,𝔅,ᛒ,ℬ,ط'
+emoji_letter_xmas['c'] ='¢,℃,𝄴'
+emoji_letter_xmas['d'] ='🌛,ԃ,Đ'
+emoji_letter_xmas['e'] ='€,∈,ℰ,モ' 
+emoji_letter_xmas['f'] ='℉,ƒ,₣,ᚩ'
+emoji_letter_xmas['g'] ='Ⓖ,Ǥ,ﻮ,Ꮆ,₲'
+emoji_letter_xmas['h'] ='ℏ,ዙ,ᚺ'
+emoji_letter_xmas['i'] ='🕯️'
+emoji_letter_xmas['j'] ='ɉ,ʝ,𝔧,ڸ'
+emoji_letter_xmas['k'] ='Ⓚ,₭,㉿,ᛕ'
+emoji_letter_xmas['l'] ='🕒,🛴,Ⱡ,ட' 
+emoji_letter_xmas['m'] ='ℳ,₥,𝔐,ற,ᛖ'
+emoji_letter_xmas['n'] ='ℕ,И,🅽,ŋ,ᾗ,₦'
+emoji_letter_xmas['o'] ='🍪,❄️ '
+emoji_letter_xmas['p'] ='₱,₱,₽,𝔭,ᚹ'
+emoji_letter_xmas['q'] ='Ǭ,Ɋ,𝔮'
+emoji_letter_xmas['r'] ='Ȑ,Ɽ,ℜ,ℛ,ᚱ'
+emoji_letter_xmas['s'] ='⑀,ى' # small 💵?
+emoji_letter_xmas['t'] ='✝️'
+emoji_letter_xmas['u'] ='ᶙ'
+emoji_letter_xmas['v'] ='♈'
+emoji_letter_xmas['w'] ='〰️,₩,௰' # not like w on some systems: 🔱
+emoji_letter_xmas['x'] ='✖,⤫,𝔛,྾,ᚸ' # 🙅‍♀️ is bad because sometimes displayed as '🙅‍♀️♀️' in ubuntu (broken grapheme clustering?)
+emoji_letter_xmas['y'] ='¥,Ŷ,⑂,ℽ,Ỿ,Ӳ'
+emoji_letter_xmas['z'] ='Ƶ,ʑ,ɀ,💤,ᶽ'
+
+############################################################
 
 # Emoji animal alphabet, works in english and german 
 # include the disputed in a hard version someday
@@ -537,6 +567,7 @@ def upside_down(text, language, grade, upside_down_rate=0):
     # workaround for chars not properly displayed on QR reader of iOS 13.4.1
     outtext = outtext.replace('ꞁ', '|') # l
     outtext = outtext.replace('Ꞁ', '˥') # L
+    outtext += " 🙃 "
     return outtext, hint
 
 
@@ -1326,8 +1357,39 @@ def emoji_alphabet(intext, language, grade):
         else:
             outtext_new += char + spacing
             
+    return outtext_new, ""
+
+def emoji_alphabet_xmas(intext, language, grade):
+
+    # top secret => 🔝  💰 € ☪️ ®️ 📧 ȶ   🎅🎅🎅🎅
+             
+    outtext=intext.lower()
+
+    # +' ' to have a space between emoji because kerning is wrong on some platforms
+    spacing=' '
+    if spacing:
+        outtext = outtext.replace(' ', '  ')
+
+    # multiple letters at once, e.g. "id" => 🆔
+    # use .replace()
+    for multi_letter in emoji_letter_multiple:
+        outtext = outtext.replace(multi_letter, random.choice(emoji_letter_multiple[multi_letter].split(','))  )
+
+    # single letters, 
+    # iterate over text
+    outtext_new=""
+    for char in outtext:
+
+        if char in emoji_letter_xmas:
+            # choose random letter of multiple e.g. m=Ⓜ️ 〽️ ♏ 
+            outtext_new += random.choice(emoji_letter_xmas[char].split(',')) + spacing
+        elif char in emoji_letter:
+            # choose random letter of multiple e.g. m=Ⓜ️ 〽️ ♏ 
+            outtext_new += random.choice(emoji_letter[char].split(',')) + spacing
+        else:
+            outtext_new += char + spacing
             
-            
+    outtext_new += " 🎅 🦌 🎁 "
     return outtext_new, ""
 
 def emoji_alphabet_animals(intext, language, grade):
@@ -1804,6 +1866,9 @@ def main():
         elif technique == "e":
             worktext, hint = emoji_alphabet(worktext, language, grade)
             function_name = "emoji_alphabet"
+        elif technique == "x":
+            worktext, hint = emoji_alphabet_xmas(worktext, language, grade)
+            function_name = "emoji_alphabet_xmas"
         elif technique == "E":
             worktext, hint = emoji_alphabet_animals(worktext, language, grade)
             function_name = "emoji_alphabet_animals"

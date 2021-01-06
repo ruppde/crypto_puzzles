@@ -4,7 +4,8 @@ Crypto Puzzles is a tool and library to provide a bunch of functions for encrypt
 
 Most easy ciphers require zero knowledge about the algorithm used. These puzzles can be "cracked" without any boring explanation, tables or tools. It should be sufficient to know that the the first words are always the same, e.g. "Top secret" to find the pattern and figure out how the secret code works. This makes it possible to decrypt the rest of the message. (Cryptographers would call it a known plaintext attack.) 
 
-Here's a running instanceof the [web interface](<http://rupp.de/crypto_puzzles/crypto_puzzles_web.py>) which supports most of the functions.
+## Examples
+Here's a running instance of the [web interface](<http://rupp.de/crypto_puzzles/crypto_puzzles_web.py>) which supports most of the functions. **Try it out.**
 
 Example sentence:
 
@@ -39,6 +40,8 @@ The school grades are just a rough estimate which kids should be able to tackle 
 #### b) Substitution ciphers
 
 * Emoji Alphabet: 🔝     ⑀ ℰ ©️ ᚱ € 𝔱 ❗️     ᵺ 📧     ㏇ 🆗 ℹ️ € ⚡     ꬃ Ȑ モ     ℏ 🆔 🌛 € ♑     ï ℕ     ᵺ ℰ     Ɽ € 🌛     ط 𝔬 ₩ £ ❗️  
+* Emoji Alphabet Xmas edition: ✝️ 🍪 ₱     ى ℰ ¢ ℜ ℰ ✝️ ❕     ᵺ ℰ     ⑀ ௰ € ∈ ʦ     🎄 Ɽ ℰ     ℏ 🆔 🌛 ℰ ₦     ᶙ ℕ Đ ℰ ℜ     Ӳ 🍪 ᶙ Ȑ     𝄴 ℏ 🎄 🕯️ Ȑ ❕  🎅 🦌 🎁  
+* Emoji Animal Alphabet (first letter of animal name): 🦖 🐙 🦜      🦂 🐘 ᆮ 🐀 🐘 🐅 ❕     🐅 🐹 🐘     🦢 🐋 🐘 🐘 🐅 🕷️     🐜 🐀 🐘     🐹 ⌶ 🐉 🐉 🐘 ᾗ     ᶙ ♑ 🐬 🐘 🐀     Ӳ 🐙 ⛎ 🐀     ☪️ 🐹 🐜 ï 🐀 ❗️ 
 * Upside down every 2nd word: ```Top ¡ʇǝɹɔǝs The sǝᴉʞooɔ are uǝppᴉɥ in ǝɥʇ red ¡ꞁʍoq```
 * Leet speak: ```T0p $3cr3t! Th3 c00k13$ @r3 h1dd3n 1n th3 r3d b0wl!```
 * Camelcase: ```tOp sEcReT! tHe cOoKiEs aRe hIdDeN In tHe rEd bOwL!```

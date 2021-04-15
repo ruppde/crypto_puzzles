@@ -45,21 +45,21 @@ from math import sqrt
 emoji_letter={}
 emoji_letter['a'] ='🅰️,ค,🃑,₳,ꬃ' # small ⎃ ?
 emoji_letter['b'] ='🅱️,฿,𝔅,ᛒ,ℬ,ط'
-emoji_letter['c'] ='©️,☪️,¢,℃,🂬,𝄴,ᆮ'
+emoji_letter['c'] ='©️,☪️,¢,℃' # too smal in some fonts: 🂬,𝄴,ᆮ
 emoji_letter['d'] ='🌛,ԃ,Đ'
 emoji_letter['e'] ='€,∈,📧,ℰ,モ' # 💶
 emoji_letter['f'] ='℉,🎏,ƒ,₣,ᚩ'
 emoji_letter['g'] ='Ⓖ,Ǥ,ﻮ,Ꮆ,₲'
 emoji_letter['h'] ='♓,ℏ,ዙ,ᚺ'
 emoji_letter['i'] ='ℹ️,🕕,𝔦,⌶,ï,༐'
-emoji_letter['j'] ='⤴️,🕙,ɉ,ʝ,🃛,𝔧,ڸ'
-emoji_letter['k'] ='Ⓚ,🃞,₭,㉿,ᛕ'
+emoji_letter['j'] ='⤴️,🕙,ɉ,ʝ,𝔧,ڸ' # too small in some fonts 🃛
+emoji_letter['k'] ='Ⓚ,₭,㉿,ᛕ' # too small 🃞
 emoji_letter['l'] ='👢,🕒,🛴,Ⱡ,£,ட' # 💷
 emoji_letter['m'] ='♏,〽️,Ⓜ️,ℳ,₥,𝔐,ற,ᛖ'
 emoji_letter['n'] ='♑,ℕ,И,🅽,ŋ,ᾗ,₦'
 emoji_letter['o'] ='⭕,🍩,💍,𝔬'
 emoji_letter['p'] ='🅿️,₱,🆊,₱,₽,𝔭,ᚹ'
-emoji_letter['q'] ='Ǭ,Ɋ,🂭,𝔮'
+emoji_letter['q'] ='Ǭ,Ɋ,𝔮' # too small 🂭
 emoji_letter['r'] ='®️,Ȑ,Ɽ,ℜ,ℛ,ᚱ'
 emoji_letter['s'] ='⚡,💲,💰,⑀,ى' # small 💵?
 emoji_letter['t'] ='✝️,ƫ,ȶ,🆃,Ṭ,₮,𝔱,⍑,ァ,ኘ,ፖ'
@@ -822,6 +822,76 @@ def camelcase(intext, language, grade):
         else:
             up=1
             outtext += char.lower()
+    return outtext.rstrip(' '), hint
+
+def uppercase_chars_in_text(intext, language, grade):
+    # only uppercase chars in random text contain message:
+    # top secret => The rOof was very Plain with freSh ...
+
+    # there's no uppercase
+    intext = intext.replace('ß','ss')
+
+    intext = convert_num_to_number_words(intext, language)
+
+    jokes = [] 
+    if language == 'de':
+        # TODO: fix dirs for direct & lib from euli
+        textfile = 'data/unfug'
+        #textfile = 'crypto_puzzles/data/unfug'
+    elif language == 'en':
+        textfile = 'data/platitudes'
+        #textfile = 'crypto_puzzles/data/platitudes'
+    else:
+        print("sorry, other languages not supported yet in uppercase_chars_in_text")
+        sys.exit()
+
+    buffer=""
+    try:
+        with open(textfile, 'r') as file:
+            lines = file.read().lower().splitlines()
+    except Exception as e:
+        print("unable to read textfile: ", textfile, e)
+        sys.exit()
+
+    for line in lines:
+        if line and line[0] == '#':
+            pass
+        elif line == '%':
+            jokes.append(buffer)
+            buffer=""
+        else:
+            buffer += line + "\n"
+
+
+    outtext=""
+    hint=""
+    up=0
+
+    intext_chars = list(intext.lower() )
+    char = intext_chars.pop(0)
+
+    done=False
+    while not done:
+        joke = random.choice(jokes)
+        while char not in joke:
+            joke = random.choice(jokes)
+
+        for joke_char in joke:
+            if done:
+                # all characters in, just append rest of joke
+                outtext += joke_char
+            elif joke_char == char:
+                outtext += char.upper()
+
+                # all chars of intext done?
+                if not len(intext_chars):
+                    done=True
+                else:
+                    char = intext_chars.pop(0)
+            else:
+                outtext += joke_char
+        outtext += "------------------------------\n"
+    
     return outtext.rstrip(' '), hint
 
 def rot13(intext, language, grade):
@@ -1728,6 +1798,7 @@ wrong_whitespace
 mirror_words
 shift_words
 stego_acrostic
+uppercase_chars_in_text
 """
 # char_to_num not reversible if the message contains numbers ;)
 
@@ -1742,6 +1813,7 @@ mirror_words
 shift_words
 char_to_num
 stego_acrostic
+uppercase_chars_in_text
 """
 # leave out, boring:
 #randomize_middle_of_words
@@ -1872,6 +1944,9 @@ def main():
         elif technique == "E":
             worktext, hint = emoji_alphabet_animals(worktext, language, grade)
             function_name = "emoji_alphabet_animals"
+        elif technique == "w":
+            worktext, hint = uppercase_chars_in_text(worktext, language, grade)
+            function_name = "uppercase_chars_in_text"
         else:
             print("Error: Technique unknown")
          

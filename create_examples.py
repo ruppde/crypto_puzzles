@@ -8,7 +8,7 @@ import os
 import argparse
 
 # techniques used via --technique param of crypto_puzzles.py (also determines the order they appear in the resulting page)
-techniques='exEUflWuSCc1A3MNQ'
+techniques='exEUflWuSCc1A3MNQw'
 # unused for various reasons: techniques='Lmnj'
 # technique 's' doesn't work here, 'm' boring
 
@@ -61,6 +61,9 @@ for technique in techniques:
             else:
                 filename  = "qr_in_qr_grade_" + str(grade) + ".png"
                 cmd += " --filename " + filename
+        elif 'filename' in locals():
+            del filename
+
 
         cmd_real = cmd + ' --show_function_name --seed 1'
         cmd = cmd.replace('./', '')

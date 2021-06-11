@@ -36,6 +36,12 @@ from collections import defaultdict
 from PIL import Image
 from math import sqrt
 
+vowels = list('aeiou')
+consonants=list("bcdfghjklmnpqrstvwxyz")
+
+# most difficult level
+max_grade=13
+
 # Emoji alphabet
 # Beware, emoji look different depending on the plattform so only choose ones, where the character can be 
 # recognized everywhere
@@ -294,11 +300,28 @@ emoji_animal['w'] ='🐋,🐺'
 #emoji_animal['y'] ='¥,💴,Ŷ,⑂,ℽ,Ỿ,Ӳ'
 emoji_animal['z'] ='🦓'
 
-
 number_words={}
 # number words have to be in the right order and start with 0
 number_words['de'] = ['null', 'eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn', 'elf', 'zwölf']
 number_words['en'] = ['zero', 'one','two','three','four','five','six','seven','eight','nine','ten', 'eleven', 'twelve']
+
+symbol_words = {}
+# .!?:-+$
+symbol_words['de.'] = 'Punkt'
+symbol_words['de!'] = 'Ausrufezeichen'
+symbol_words['de?'] = 'Fragezeichen'
+symbol_words['de:'] = 'Doppelpunkt'
+symbol_words['de-'] = 'Minus'
+symbol_words['de+'] = 'Plus'
+symbol_words['de$'] = 'Dollar'
+
+symbol_words['en.'] = 'dot'
+symbol_words['en!'] = 'exclamation mark'
+symbol_words['en?'] = 'question mark'
+symbol_words['en:'] = 'colon'
+symbol_words['en-'] = 'minus'
+symbol_words['en+'] = 'plus'
+symbol_words['en$'] = 'dollar'
 
 animals = {}
 animals['en'] = [
@@ -409,6 +432,27 @@ alphabet_words['de'] = [
         'yak',
         'zaubert',
         ]
+
+dotted_alphabet= "Ȧȧ Ḃḃ Ċċ Ḋḋ Ėė Ḟḟ Ġġ Ḣḣ Ịị Ⓙⓙ Ḳḳ Ḷḷ Ṁṁ Ṅṅ Ȯȯ Ṗṗ Ⓠⓠ Ṙṙ Ṡṡ Ṫṫ Ụụ Ṿṿ Ẇẇ Ẋẋ Ẏẏ Żż"
+alphabet= list("abcdefghijklmnopqrstuvwxyz")
+# alternate chars: Ạạ Ḅḅ Ḍḍ Ẹẹ Ḥḥ Ṃṃ Ṇṇ O͘o͘ Ọọ Ṛṛ Ṣṣ Ṭṭ Ẉẉ X̣x̣ Ỵỵ Ẓẓ	
+
+dotted_pairs = dotted_alphabet.split(' ')
+dotted_char={}
+
+for dotted_pair in dotted_pairs:
+    char = alphabet.pop(0)
+    upper = dotted_pair[0]
+    lower = dotted_pair[1]
+
+    # append a space after j and q because of wrong spacing (at least on the ubuntu terminal)
+    if char == 'j' or char == 'q':
+        append_space = ' '
+    else:
+        append_space = ''
+
+    dotted_char[char.upper()] = upper + append_space
+    dotted_char[char] = lower + append_space
 
 def insert_noise(intext, language, grade=1, noise_type="", noise_chars=""):
 
@@ -824,16 +868,7 @@ def camelcase(intext, language, grade):
             outtext += char.lower()
     return outtext.rstrip(' '), hint
 
-def uppercase_chars_in_text(intext, language, grade):
-    # only uppercase chars in random text contain message:
-    # top secret => The rOof was very Plain with freSh ...
-
-    # there's no uppercase
-    intext = intext.replace('ß','ss')
-
-    intext = convert_num_to_number_words(intext, language)
-
-    jokes = [] 
+def get_textfile(language):
     if language == 'de':
         # TODO: fix dirs for direct & lib from euli
         textfile = 'data/unfug'
@@ -845,16 +880,24 @@ def uppercase_chars_in_text(intext, language, grade):
         print("sorry, other languages not supported yet in uppercase_chars_in_text")
         sys.exit()
 
+    return textfile
+
+def get_jokes(language):
+
+    textfile = get_textfile(language)
+    jokes = [] 
+
     buffer=""
     try:
         with open(textfile, 'r') as file:
-            lines = file.read().lower().splitlines()
+            lines = file.read().splitlines()
     except Exception as e:
-        print("unable to read textfile: ", textfile, e)
+        print(f"unable to read textfile: {textfile} - error: {e} - language: {language}")
         sys.exit()
 
     for line in lines:
-        if line and line[0] == '#':
+        # regex is to avoid names under quotes because they're too hard to spot errors for misspelling_in_text()
+        if line and ( line[0] == '#' or re.search(r'\s\s-- ', line )):
             pass
         elif line == '%':
             jokes.append(buffer)
@@ -862,32 +905,206 @@ def uppercase_chars_in_text(intext, language, grade):
         else:
             buffer += line + "\n"
 
+    return jokes
+
+def next_char(intext_chars):
+    # all chars of intext done?
+    if not len(intext_chars):
+        done=True
+        char=''
+    else:
+        done=False
+        char = intext_chars.pop(0)
+
+    return char, intext_chars, done
+
+def misspelling_in_text(intext, language, grade):
+    # only misspelled chars (the real chars which would be there without the error) in random text contain message:
+
+    # top secret => Xhe rfof was very jlain with frelh ...
+
+
+    # replace 1,2, ... with one, two, ...
+    intext = convert_num_to_number_words(intext, language)
+    intext = convert_symbols_to_words(intext, language)
+
+    jokes = [] 
+    jokes = get_jokes(language)
+
+    outtext=""
+    hint=""
+    up=0
+
+    # for the low grades replace with char which should mostly be easy to spot as an error. 
+    if language == 'en':
+        replace_chars=list("qxvzwjpc")
+    elif language == 'de':
+        replace_chars=list("qxvzwjpcy")
+    else:
+        replace_chars=list("qxvzwjpc")
+
+    if grade >= 8:
+        replace_chars=list("abcdefghijklmnopqrstuvwxyz")
+
+    done=False
+    intext_chars = list(intext)
+    char, intext_chars, done = next_char(intext_chars)
+
+    while not done:
+        joke = random.choice(jokes)
+        if char in dotted_char:
+            while char not in joke:
+                joke = random.choice(jokes)
+        else:
+            outtext += char + '\n'
+            outtext += "------------------------------\n"
+            char, intext_chars, done = next_char(intext_chars)
+            continue
+
+        finish_this_one=False
+        keep_correct = 0
+        for joke_char in joke:
+            # avoid misspellings directly one after another, because that would be impossible to figure out, especially if randomly the same common word like e.g. and, or, the, ... would be in ciphertext and joke
+            if keep_correct:
+                outtext += joke_char
+                # countdown until 0 
+                keep_correct -= 1
+            elif done or finish_this_one:
+                # all characters in, just append rest of joke
+                outtext += joke_char
+            elif joke_char == char:
+
+                replacement_char = ''
+                while len(replacement_char) != 1:
+                    replacement_char = random.choice(replace_chars)
+
+                    if grade < 10:
+                        # avoid replacing a vowel with a vowel because the probability is to high to change to another existing word which then can't be spotted as an error, e.g. post => past
+                        # grades 10+ could figure it out from the nonsense word in the context or just guess the missing char
+                        if char in vowels and replacement_char in vowels:
+                            replacement_char = ''
+
+                    # if original char was uppercase then also uppercase replaced char 
+                    if char.upper() == char:
+                        replacement_char = replacement_char.upper()
+
+                outtext += replacement_char
+                keep_correct = max_grade + 1 - grade
+
+                char, intext_chars, done = next_char(intext_chars)
+                if char not in dotted_char:
+                    finish_this_one=True
+
+            else:
+                outtext += joke_char
+        outtext += "------------------------------\n"
+    
+    return outtext.rstrip(' '), hint
+
+def dotted_chars_in_text(intext, language, grade):
+    # only dotted chars in random text contain message:
+
+    # top secret => Ṫhe rȯof was very ṗlain with freṣh ...
+
+    # there are no dotted german umlauts so replace ßöüäÖÜÄ
+    intext = intext.replace('ß','ss')
+    intext = intext.replace('ä','ae')
+    intext = intext.replace('ö','oe')
+    intext = intext.replace('ü','ue')
+    intext = intext.replace('Ä','AE')
+    intext = intext.replace('Ö','OE')
+    intext = intext.replace('Ü','UE')
+
+    # there are no dotted numbers so replace with one, two, ...
+    intext = convert_num_to_number_words(intext, language)
+    intext = convert_symbols_to_words(intext, language)
+
+    jokes = [] 
+    jokes = get_jokes(language)
+
+    outtext=""
+    hint=""
+    up=0
+
+    intext_chars = list(intext)
+
+    char, intext_chars, done = next_char(intext_chars)
+
+    while not done:
+        joke = random.choice(jokes)
+        if char in dotted_char:
+            while char not in joke:
+                joke = random.choice(jokes)
+        else:
+            outtext += char + '\n'
+            outtext += "------------------------------\n"
+            char, intext_chars, done = next_char(intext_chars)
+            continue
+
+        finish_this_one=False
+        for joke_char in joke:
+            if done or finish_this_one:
+                # all characters in, just append rest of joke
+                outtext += joke_char
+            elif joke_char == char:
+                outtext += dotted_char[char]
+
+                char, intext_chars, done = next_char(intext_chars)
+                if char not in dotted_char:
+                    finish_this_one=True
+            else:
+                outtext += joke_char
+        outtext += "------------------------------\n"
+    
+    return outtext.rstrip(' '), hint
+
+def uppercase_chars_in_text(intext, language, grade):
+    # only uppercase chars in random text contain message:
+    # top secret => The rOof was very Plain with freSh ...
+
+    # TODO: don't uppercase 1st char in sentece for lower grades because that's tricky to spot ;)
+
+    # there's no uppercase
+    intext = intext.replace('ß','ss')
+
+    # there are no dotted numbers so replace with one, two, ...
+    intext = convert_num_to_number_words(intext, language)
+    intext = convert_symbols_to_words(intext, language)
+
+    jokes = [] 
+    jokes = get_jokes(language)
 
     outtext=""
     hint=""
     up=0
 
     intext_chars = list(intext.lower() )
-    char = intext_chars.pop(0)
+    char, intext_chars, done = next_char(intext_chars)
 
     done=False
     while not done:
-        joke = random.choice(jokes)
-        while char not in joke:
-            joke = random.choice(jokes)
+        joke = random.choice(jokes).lower()
+        if char in dotted_char:
+            while char not in joke:
+                joke = random.choice(jokes).lower()
+        else:
+            outtext += char + '\n'
+            outtext += "------------------------------\n"
+            char, intext_chars, done = next_char(intext_chars)
+            continue
 
+
+        finish_this_one=False
         for joke_char in joke:
-            if done:
+            if done or finish_this_one:
                 # all characters in, just append rest of joke
                 outtext += joke_char
             elif joke_char == char:
                 outtext += char.upper()
 
-                # all chars of intext done?
-                if not len(intext_chars):
-                    done=True
-                else:
-                    char = intext_chars.pop(0)
+                char, intext_chars, done = next_char(intext_chars)
+                if char not in dotted_char:
+                    finish_this_one=True
             else:
                 outtext += joke_char
         outtext += "------------------------------\n"
@@ -1059,6 +1276,18 @@ def convert_num_to_number_words(intext, language):
         if char in "0123456789":
             value = int(char)
             outtext += number_words[language][value] + ' '
+        else:
+            outtext += char
+
+    return outtext.rstrip(' ')
+
+def convert_symbols_to_words(intext, language):
+
+    outtext = ''
+    # ! => exclamation mark
+    for char in intext:
+        if char in ".!?:-+$":
+            outtext += symbol_words[language + char] + ' '
         else:
             outtext += char
 
@@ -1799,6 +2028,8 @@ mirror_words
 shift_words
 stego_acrostic
 uppercase_chars_in_text
+dotted_chars_in_text
+misspelling_in_text
 """
 # char_to_num not reversible if the message contains numbers ;)
 
@@ -1814,6 +2045,8 @@ shift_words
 char_to_num
 stego_acrostic
 uppercase_chars_in_text
+dotted_chars_in_text
+misspelling_in_text
 """
 # leave out, boring:
 #randomize_middle_of_words
@@ -1828,7 +2061,7 @@ def main():
     # parse command line args
     parser = argparse.ArgumentParser()
     parser.add_argument("plaintext", help="Plain text to be \"encrypted\"")
-    parser.add_argument("--technique", "-T", help="Techniques used to \"encrypt\". Such argument is a string composed by any combination of NUMLlWmSC13AncjqQRuf characters where each letter stands for a different technique (details on github).", required=True)
+    parser.add_argument("--technique", "-T", help="Techniques used to \"encrypt\". Such argument is a string composed by any combination of NUMLlWmSC13AncjqQRufeXEwdp characters where each letter stands for a different technique (details on github example list).", required=True)
     parser.add_argument("--noise_type", help="Type of noise. Can be numbers,numberwords, animals")
     parser.add_argument("--noise_chars", help="Character(s) for noise")
     parser.add_argument("--upside_down_rate", help="Turn every nth word", default=2)
@@ -1855,10 +2088,6 @@ def main():
     num_parts = int(args.num_parts)
     global ƃnqǝp
     ƃnqǝp = args.ƃnqǝp
-
-    if ƃnqǝp:
-        print("grade: " + str(grade))
-        print("filename: " + filename)
 
 
     outtext = ""
@@ -1947,11 +2176,23 @@ def main():
         elif technique == "w":
             worktext, hint = uppercase_chars_in_text(worktext, language, grade)
             function_name = "uppercase_chars_in_text"
+        elif technique == "d":
+            worktext, hint = dotted_chars_in_text(worktext, language, grade)
+            function_name = "dotted_chars_in_text"
+        elif technique == "p":
+            worktext, hint = misspelling_in_text(worktext, language, grade)
+            function_name = "misspelling_in_text"
         else:
             print("Error: Technique unknown")
          
     if show_function_name:
         print(function_name)
+
+    if ƃnqǝp:
+        print("grade: " + str(grade))
+        print("filename: " + filename)
+        print("function_name: " + function_name)
+        print("\n")
 
     if worktexts:
         #print(worktexts)

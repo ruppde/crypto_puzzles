@@ -3,3 +3,4 @@ pyqrcode
 pyfiglet
 roman
 Pillow
+pypng

@@ -60,7 +60,7 @@ emoji_letter['h'] ='♓,ℏ,ዙ,ᚺ'
 emoji_letter['i'] ='ℹ️,🕕,𝔦,⌶,ï,༐'
 emoji_letter['j'] ='⤴️,🕙,ɉ,ʝ,𝔧,ڸ' # too small in some fonts 🃛
 emoji_letter['k'] ='Ⓚ,₭,㉿,ᛕ' # too small 🃞
-emoji_letter['l'] ='👢,🕒,🛴,Ⱡ,£,ட' # 💷
+emoji_letter['l'] ='👢,🕒,🛴,Ⱡ,ட' # 💷
 emoji_letter['m'] ='♏,〽️,Ⓜ️,ℳ,₥,𝔐,ற,ᛖ'
 emoji_letter['n'] ='♑,ℕ,И,🅽,ŋ,ᾗ,₦'
 emoji_letter['o'] ='⭕,🍩,💍,𝔬'
@@ -611,6 +611,8 @@ def upside_down(text, language, grade, upside_down_rate=0):
     # workaround for chars not properly displayed on QR reader of iOS 13.4.1
     outtext = outtext.replace('ꞁ', '|') # l
     outtext = outtext.replace('Ꞁ', '˥') # L
+    # nicer k
+    outtext = outtext.replace('⋊', 'ʞ') # k
     outtext += " 🙃 "
     return outtext, hint
 
